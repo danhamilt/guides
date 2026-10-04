@@ -16,8 +16,8 @@ Live at **https://danhamilt.github.io/guides/**
 
 1. The mental model — the agent loop, Plan/Act, context, tokens
 2. Setup — VS Code, the Cline extension, a DeepSeek key, model choice and cost
-3. Editors &amp; alternatives — VSCodium (same editor, no Microsoft telemetry), Cursor
-   (why the free plan does not really do DeepSeek), JetBrains/Zed, and where else Cline runs
+3. Editors &amp; alternatives — Cursor's agent window with Cline (the free, DeepSeek route),
+   VSCodium (same editor, no Microsoft telemetry), and where else Cline runs
 4. Working with it — Plan first, `.clinerules`, controlling the blast radius
 5. The GitHub integration — auth, PRs and issues in the editor, `gh`, Cline in Actions
 6. GitHub gists — public vs secret, `gh gist`, gist vs repo vs Pages, rendering HTML

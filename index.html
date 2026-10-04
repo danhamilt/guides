@@ -281,6 +281,20 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
     <h2>3. Editors &amp; alternatives</h2>
     <p class="lead-in">VS Code is only the host. The substance is Cline plus a cheap model, and Cline runs in several editors &mdash; so if you dislike VS Code, you are not stuck with it.</p>
 
+    <h3>If you want Cursor's agent window specifically</h3>
+    <p>That layout &mdash; code on one side, an agent chat panel on the other, with plans, inline diffs, and approve buttons &mdash; is Cursor's agent. You can have exactly that layout, driven by DeepSeek, on Cursor's <strong>free</strong> plan, by putting <strong>Cline inside Cursor</strong>.</p>
+    <p>The restriction in the next subsection applies to Cursor's <em>own</em> agent asking for a Pro subscription. It does not apply to a third-party extension doing the work with your own key. So:</p>
+    <ol>
+      <li>Install Cursor (free) from <a href="https://cursor.com">cursor.com</a>.</li>
+      <li>Extensions panel (<code>Ctrl/Cmd+Shift+X</code>) &rarr; search <strong>Cline</strong> &rarr; Install.</li>
+      <li>In Cline's settings: <strong>API Provider: DeepSeek</strong> &rarr; paste your key &rarr; model <code>deepseek-flash</code>.</li>
+    </ol>
+    <p>You now have the editor and the window you wanted, and Cline &mdash; not Cursor's metered agent &mdash; is what spends your DeepSeek key. No Cursor Pro required.</p>
+    <div class="note blue">
+      <span class="lbl">The window is the same everywhere</span>
+      <p>Cline's panel looks and behaves the same in VS Code, VSCodium, Cursor, JetBrains, and Zed. So "an agent chat beside the code" is the shared experience; the host is mostly cosmetic. Pick whichever editor you will actually keep opening &mdash; and if that is Cursor, use it, just let Cline drive.</p>
+    </div>
+
     <h3>VSCodium &mdash; same editor, fewer Microsoft bits</h3>
     <p>VSCodium is VS Code built from the same open-source repo, minus Microsoft's telemetry, branding, and license. It is <strong>not easier</strong> than VS Code; it is the same editor, and day to day you will not notice a difference except that nothing phones home.</p>
     <p>Cline explicitly supports it and ships on Open VSX, so the install is the same flow: Extensions &rarr; search <em>Cline</em> &rarr; install. What you give up is the Microsoft Marketplace &mdash; VSCodium uses <a href="https://open-vsx.org">Open VSX</a> instead, which is smaller and missing some extensions that are licensed to the official build (Remote Development, some debuggers, Copilot, assorted Microsoft extensions). Occasionally Open VSX rate-limits and the extension search fails on a fresh install; retry, or install a <code>.vsix</code> by hand.</p>
@@ -292,7 +306,7 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
       <li><strong>Custom keys are documented for chat models only.</strong> Tab completion always runs on Cursor's own models, regardless of your settings.</li>
       <li><strong>Agent is a separate lane.</strong> Cursor's Agent and Composer run on its own proprietary models, and whether a BYOK DeepSeek key drives the full agent loop is undocumented, with mixed community reports at best.</li>
     </ul>
-    <p>So "Cursor free" means Cursor's own models, not DeepSeek's cheap tokens. If you want Cursor's UX, budget $20/mo (or use the 14-day Pro trial) and treat DeepSeek as a chat-pane extra &mdash; base URL <code>https://api.deepseek.com/v1</code>, model <code>deepseek-v4-pro</code> &mdash; not as the thing driving the agent.</p>
+    <p>So "Cursor free" means Cursor's own models, not DeepSeek's cheap tokens. If you want Cursor's <em>own</em> agent on DeepSeek, budget $20/mo or use the 14-day Pro trial. If what you actually want is the layout, skip that and use the Cline path above &mdash; same window, your key, no subscription. DeepSeek as a chat-pane extra in Cursor is base URL <code>https://api.deepseek.com/v1</code>, model <code>deepseek-v4-pro</code>.</p>
     <div class="note amber">
       <span class="lbl">If it is the UI you dislike, this will not help</span>
       <p>Cursor is itself a VS Code fork &mdash; same layout, same keybindings, same muscle memory. VSCodium removes the Microsoft parts but keeps the UI identical. If you genuinely want a different editor, the options that actually feel different are <strong>JetBrains</strong> and <strong>Zed</strong>, both of which Cline supports.</p>
@@ -308,7 +322,7 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
         <tr><td><strong>DeepSeek</strong></td><td>Native provider</td><td>Native provider</td><td>Chat only; Agent needs Pro and is undocumented</td></tr>
         <tr><td><strong>Telemetry</strong></td><td>Microsoft</td><td>None</td><td>Cursor</td></tr>
         <tr><td><strong>Extensions</strong></td><td>Microsoft Marketplace</td><td>Open VSX (smaller)</td><td>Microsoft-compatible</td></tr>
-        <tr><td><strong>Pick it if</strong></td><td>Default path, least friction</td><td>Same, minus Microsoft</td><td>You want polish and will pay for it</td></tr>
+        <tr><td><strong>Pick it if</strong></td><td>Default path, least friction</td><td>Same, minus Microsoft</td><td>You want this exact agent window &mdash; pair it with Cline so you don't pay for Cursor's agent</td></tr>
       </tbody>
     </table>
 
