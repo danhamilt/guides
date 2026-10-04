@@ -130,6 +130,7 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
     <a class="home" href="./">&larr; The editor guide</a>
     <span class="sp"></span>
     <a href="#choose">How to choose</a>
+    <a href="#deepseek">Why DeepSeek</a>
     <a href="#technical">Technical</a>
     <a href="#middle">Middle</a>
     <a href="#easy">Non-technical</a>
@@ -210,6 +211,50 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
         <tr><td>In a terminal all day</td><td>Cline CLI</td><td>Same agent, scriptable, headless in CI</td></tr>
       </tbody>
     </table>
+  </section>
+
+  <!-- why deepseek -->
+  <section id="deepseek">
+    <h2>Why DeepSeek makes this easy</h2>
+    <p class="lead-in">The bring-your-own-key tier is only as approachable as the key you bring. DeepSeek is the one that makes it painless, for two reasons: it is trivially easy to integrate, and it is absurdly cheap.</p>
+
+    <h3>It is easy because it speaks OpenAI</h3>
+    <p>DeepSeek's API is OpenAI-compatible. That single fact means it drops into almost every tool on this page with no custom work, and the integration is always the same three values:</p>
+    <div class="codebox">
+      <pre><code>base URL : https://api.deepseek.com
+key      : sk-...            (from platform.deepseek.com)
+model    : deepseek-flash    (or deepseek-v4-pro)</code></pre>
+    </div>
+    <p>In the tools with a <em>native</em> DeepSeek provider &mdash; Cherry Studio, Chatbox, Cline, the DeepSeek Harness &mdash; it is not even that: you pick <strong>DeepSeek</strong> from a dropdown, paste the key, and you are done. Nothing to configure, no proxy, no adapter. In anything else, the three values above are the whole job.</p>
+
+    <h3>It is cheap because the numbers are tiny</h3>
+    <p>This is the part people underestimate. Per <strong>1 million tokens</strong>, off-peak, on <code>deepseek-flash</code>:</p>
+    <table>
+      <thead><tr><th>What</th><th>Price</th><th>In practice</th></tr></thead>
+      <tbody>
+        <tr><td>Input (the question + context)</td><td>$0.15</td><td>2,000 tokens &asymp; <strong>$0.0003</strong></td></tr>
+        <tr><td>Output (the answer)</td><td>$0.60</td><td>500 tokens &asymp; <strong>$0.0003</strong></td></tr>
+        <tr><td>Cache hit (text it has already seen)</td><td>$0.003</td><td>effectively free</td></tr>
+      </tbody>
+    </table>
+    <p>Put plainly: <strong>a typical question costs well under a tenth of a cent.</strong> A hundred of them cost about six cents. The five dollars you put on the account at the start is not a subscription you will notice &mdash; it lasts an ordinary person months.</p>
+
+    <div class="note green">
+      <span class="lbl">Why cheap matters more than it sounds</span>
+      <p>Agents are expensive not because each step is costly, but because they take many steps and re-send the same context every time. DeepSeek's cache-hit price is <strong>$0.003 per million tokens</strong> &mdash; two hundred times cheaper than output. The exact thing that makes agentic tools drain an account elsewhere is almost free here. That is what turns "cheap" into "you can leave it running."</p>
+    </div>
+
+    <h3>Where it plugs in</h3>
+    <ul>
+      <li><strong>Native dropdown:</strong> Cherry Studio, Chatbox, Cline, DeepSeek Harness &mdash; pick DeepSeek, paste, done.</li>
+      <li><strong>OpenAI-compatible:</strong> anything else &mdash; use the three values above.</li>
+      <li><strong>One key, many models:</strong> if you ever want to switch models without new accounts, put <a href="https://openrouter.ai">OpenRouter</a> in front instead. Slightly more expensive, one key for everything.</li>
+    </ul>
+
+    <div class="note amber">
+      <span class="lbl">The only trap</span>
+      <p>Older builds and blog posts still name <code>deepseek-chat</code> and <code>deepseek-reasoner</code>. Both were retired on 24 July 2026 and now fail. Wherever a model name is asked for, the answer is <code>deepseek-flash</code> &mdash; or <code>deepseek-v4-pro</code> if you want the heavier model at roughly four times the price.</p>
+    </div>
   </section>
 
   <!-- spectrum -->
