@@ -129,6 +129,7 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
   <div class="wrap">
     <a href="#model">Mental model</a>
     <a href="#setup">Setup</a>
+    <a href="#editors">Editors</a>
     <a href="#work">Working with it</a>
     <a href="#github">GitHub</a>
     <a href="#gists">Gists</a>
@@ -145,7 +146,7 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
     <h1>AI in Your Editor</h1>
     <p class="lede">An agent inside VS Code, wired to DeepSeek, connected to GitHub &mdash; plus what gists are actually good for. Aimed at developers who have been writing code for years and are new to the AI tooling, not at people learning to code.</p>
     <div class="hero-facts">
-      <span class="fact">VS Code + Cline</span>
+      <span class="fact">VS Code / VSCodium + Cline</span>
       <span class="fact">DeepSeek &mdash; pay per token, ~<b>$5</b> to start</span>
       <span class="fact">GitHub + gists covered</span>
       <span class="fact">October 2026</span>
@@ -276,8 +277,50 @@ footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
   </section>
 
   <!-- 3 -->
+  <section id="editors">
+    <h2>3. Editors &amp; alternatives</h2>
+    <p class="lead-in">VS Code is only the host. The substance is Cline plus a cheap model, and Cline runs in several editors &mdash; so if you dislike VS Code, you are not stuck with it.</p>
+
+    <h3>VSCodium &mdash; same editor, fewer Microsoft bits</h3>
+    <p>VSCodium is VS Code built from the same open-source repo, minus Microsoft's telemetry, branding, and license. It is <strong>not easier</strong> than VS Code; it is the same editor, and day to day you will not notice a difference except that nothing phones home.</p>
+    <p>Cline explicitly supports it and ships on Open VSX, so the install is the same flow: Extensions &rarr; search <em>Cline</em> &rarr; install. What you give up is the Microsoft Marketplace &mdash; VSCodium uses <a href="https://open-vsx.org">Open VSX</a> instead, which is smaller and missing some extensions that are licensed to the official build (Remote Development, some debuggers, Copilot, assorted Microsoft extensions). Occasionally Open VSX rate-limits and the extension search fails on a fresh install; retry, or install a <code>.vsix</code> by hand.</p>
+
+    <h3>Cursor &mdash; the polished option, and the honest answer on free + DeepSeek</h3>
+    <p>The short answer as of October 2026 is <strong>effectively no</strong>, for three reasons:</p>
+    <ul>
+      <li><strong>BYOK is Pro-only for the features that matter.</strong> Using your own key with Agent, Composer, Edit, and Ask requires a Pro subscription. It briefly worked on Free as an undocumented option, and that is now closed &mdash; the "you've hit your usage limit" message people hit is really a subscription check.</li>
+      <li><strong>Custom keys are documented for chat models only.</strong> Tab completion always runs on Cursor's own models, regardless of your settings.</li>
+      <li><strong>Agent is a separate lane.</strong> Cursor's Agent and Composer run on its own proprietary models, and whether a BYOK DeepSeek key drives the full agent loop is undocumented, with mixed community reports at best.</li>
+    </ul>
+    <p>So "Cursor free" means Cursor's own models, not DeepSeek's cheap tokens. If you want Cursor's UX, budget $20/mo (or use the 14-day Pro trial) and treat DeepSeek as a chat-pane extra &mdash; base URL <code>https://api.deepseek.com/v1</code>, model <code>deepseek-v4-pro</code> &mdash; not as the thing driving the agent.</p>
+    <div class="note amber">
+      <span class="lbl">If it is the UI you dislike, this will not help</span>
+      <p>Cursor is itself a VS Code fork &mdash; same layout, same keybindings, same muscle memory. VSCodium removes the Microsoft parts but keeps the UI identical. If you genuinely want a different editor, the options that actually feel different are <strong>JetBrains</strong> and <strong>Zed</strong>, both of which Cline supports.</p>
+    </div>
+
+    <h3>Where else Cline runs</h3>
+    <p>Cline is not VS Code-specific. The same extension runs in <strong>Cursor</strong>, <strong>VSCodium</strong>, <strong>Windsurf</strong>, and <strong>JetBrains</strong> IDEs, with an <strong>ACP</strong> integration for editors such as <strong>Zed</strong> and Neovim. If you already live in IntelliJ or PyCharm, you do not have to move editors at all. The <code>cline</code> CLI shares the same agent core &mdash; same Plan/Act, rules, and MCP configuration across every surface. Pick the host you will actually keep using; it does not change the workflow.</p>
+
+    <table>
+      <thead><tr><th></th><th>VS Code + Cline</th><th>VSCodium + Cline</th><th>Cursor</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cost</strong></td><td>Free + token cost</td><td>Free + token cost</td><td>$20/mo; free tier uses Cursor's models</td></tr>
+        <tr><td><strong>DeepSeek</strong></td><td>Native provider</td><td>Native provider</td><td>Chat only; Agent needs Pro and is undocumented</td></tr>
+        <tr><td><strong>Telemetry</strong></td><td>Microsoft</td><td>None</td><td>Cursor</td></tr>
+        <tr><td><strong>Extensions</strong></td><td>Microsoft Marketplace</td><td>Open VSX (smaller)</td><td>Microsoft-compatible</td></tr>
+        <tr><td><strong>Pick it if</strong></td><td>Default path, least friction</td><td>Same, minus Microsoft</td><td>You want polish and will pay for it</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note blue">
+      <span class="lbl">Do not over-optimise the host</span>
+      <p>The host is the least interesting decision here. The value comes from Cline, a committed <code>.clinerules/</code>, a cheap model, and the habit of reading the plan before approving it. Any of these editors gets you there; spending a week choosing between them does not.</p>
+    </div>
+  </section>
+
+  <!-- 4 -->
   <section id="work">
-    <h2>3. Working with it</h2>
+    <h2>4. Working with it</h2>
     <p class="lead-in">The difference between a useful agent and an expensive autocomplete is how you drive the loop.</p>
 
     <h3>Plan first, and mean it</h3>
@@ -310,9 +353,9 @@ paths: ["src/**/*.ts"]
     </ul>
   </section>
 
-  <!-- 4 -->
+  <!-- 5 -->
   <section id="github">
-    <h2>4. The GitHub integration</h2>
+    <h2>5. The GitHub integration</h2>
     <p class="lead-in">Three layers: auth built into VS Code, an extension for PRs and issues, and the CLI for automation.</p>
 
     <svg class="diagram dg" viewBox="0 0 860 300" role="img" aria-label="Flow from a GitHub issue to a branch, agent edits, a pull request, and review">
@@ -388,9 +431,9 @@ run: |
     </div>
   </section>
 
-  <!-- 5 -->
+  <!-- 6 -->
   <section id="gists">
-    <h2>5. GitHub gists</h2>
+    <h2>6. GitHub gists</h2>
     <p class="lead-in">A gist is a single-file (or few-file) git repository with a web UI. It is a URL, not a project.</p>
 
     <h3>What a gist actually is</h3>
@@ -477,9 +520,9 @@ https://cdn.statically.io/gist/&lt;user&gt;/&lt;id&gt;/raw/index.html</code></pr
     <p>Grab the <code>&lt;script src="https://gist.github.com/&lt;user&gt;/&lt;id&gt;.js"&gt;&lt;/script&gt;</code> snippet from any gist and drop it into a page to embed the file with syntax highlighting. Good for docs, blog posts, and wikis.</p>
   </section>
 
-  <!-- 6 -->
+  <!-- 7 -->
   <section id="prompting">
-    <h2>6. Prompting patterns that actually work</h2>
+    <h2>7. Prompting patterns that actually work</h2>
     <p class="lead-in">You already know how to specify work precisely. The trick is aiming it at something with no memory and a fixed context window.</p>
 
     <div class="prompt"><div class="ph">Plan before code</div>
@@ -506,9 +549,9 @@ https://cdn.statically.io/gist/&lt;user&gt;/&lt;id&gt;/raw/index.html</code></pr
     </div>
   </section>
 
-  <!-- 7 -->
+  <!-- 8 -->
   <section id="gotchas">
-    <h2>7. Gotchas</h2>
+    <h2>8. Gotchas</h2>
     <table>
       <thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead>
       <tbody>
@@ -530,9 +573,9 @@ https://cdn.statically.io/gist/&lt;user&gt;/&lt;id&gt;/raw/index.html</code></pr
     </div>
   </section>
 
-  <!-- 8 -->
+  <!-- 9 -->
   <section id="cheat">
-    <h2>8. Cheatsheet</h2>
+    <h2>9. Cheatsheet</h2>
 
     <h4>Models</h4>
     <table>
@@ -587,7 +630,7 @@ gh gist delete &lt;id&gt;</code></pre>
 
 <footer>
   <div class="wrap">
-    <p><strong>AI in Your Editor</strong> &mdash; setup, workflow, GitHub and gists. Model names, prices, commands, and URLs were correct in October 2026; providers move faster than that, so re-check the official links in section 8 before relying on a specific figure.</p>
+    <p><strong>AI in Your Editor</strong> &mdash; setup, workflow, GitHub and gists. Model names, prices, commands, and URLs were correct in October 2026; providers move faster than that, so re-check the official links in section 9 before relying on a specific figure.</p>
   </div>
 </footer>
 
