@@ -1,23 +1,32 @@
-# Your First AI Helper
+# AI in Your Editor
 
-A gentle, picture-by-picture setup guide for a complete beginner, on Windows: install a free
-AI-powered editor (VS Code + Cline), connect it to DeepSeek, then make diagrams and publish
-little web pages to the internet with nothing more than a drag-and-drop.
+A practical setup guide for developers who have been writing code for years but are new to AI
+tooling: getting an agent into VS Code with DeepSeek, wiring it into GitHub, and using GitHub
+gists well. Not a beginner's guide to programming.
 
-No prior experience assumed. Interactive checklist with saved progress, and hand-built
-diagrams for every step.
+Interactive setup checklist, hand-built SVG diagrams, and copyable commands throughout.
 
-Live at **https://guides.drhamilton.dev**
+Live at **https://danhamilt.github.io/guides/**
 
 ## Contents
 
 - `index.html` — the guide (single self-contained file, no dependencies)
 
+## What it covers
+
+1. The mental model — the agent loop, Plan/Act, context, tokens
+2. Setup — VS Code, the Cline extension, a DeepSeek key, model choice and cost
+3. Working with it — Plan first, `.clinerules`, controlling the blast radius
+4. The GitHub integration — auth, PRs and issues in the editor, `gh`, Cline in Actions
+5. GitHub gists — public vs secret, `gh gist`, gist vs repo vs Pages, rendering HTML
+6. Prompting patterns
+7. Gotchas — retired model names, `gh` hangs, MCP approval, secrets
+8. Cheatsheet — models, CLI, `gh`, links
+
 ## Editing
 
-Everything lives in `index.html`. Styles are inline in a `<style>` block, the diagrams are
-hand-written inline SVG, and the small amount of JavaScript handles the copy buttons and the
-saved progress checklist.
+Everything lives in `index.html`. Styles are inline in a `<style>` block, diagrams are inline
+SVG, and the small amount of JavaScript handles copy buttons and the saved checklist.
 
-Model and price details reflect DeepSeek's lineup in October 2026. If the tooling changes,
-the affected copy is in step 3 (the key), step 4 (the model name) and the troubleshooting table.
+Tooling details (model names, `gh` and `cline` flags, extension behaviour) reflect October 2026
+and are the first thing to check if something stops matching reality.
