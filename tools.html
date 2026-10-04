@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pick Your Tool — The AI Landscape, Technical to Non-Technical</title>
+<meta name="description" content="Every practical way to use an AI model, from a terminal agent to a one-click desktop app. What each is best for, how to set it up, what it costs, and where to get it.">
+<style>
+:root{
+  --bg:#ffffff; --ink:#1a1c22; --muted:#5b6273; --line:#e2e5ec; --panel:#f6f7fa;
+  --blue:#2f5bd7; --blue-soft:#eaf0ff; --green:#1a7f4b; --green-soft:#e9f7ef;
+  --amber:#8a5a00; --amber-soft:#fff7e6; --red:#b42318; --red-soft:#fdecea;
+  --violet:#6d3bd7; --violet-soft:#f1ebff;
+  --radius:14px; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1116; --ink:#e9ecf2; --muted:#a3abbb; --line:#262b35; --panel:#161a21;
+    --blue:#8aa5ff; --blue-soft:#161d33; --green:#5fd39b; --green-soft:#10231a;
+    --amber:#e8b75a; --amber-soft:#241d0c; --red:#ff8b7d; --red-soft:#2a1512;
+    --violet:#b79cff; --violet-soft:#1d1733;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.25;letter-spacing:-.01em}
+h2{font-size:1.44rem;margin:0 0 4px;padding-bottom:10px;border-bottom:3px solid var(--blue);display:inline-block}
+h3{font-size:1.14rem;margin:28px 0 4px}
+h4{font-size:.82rem;margin:18px 0 4px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+p{margin:12px 0}
+
+.topnav{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.topnav .wrap{display:flex;gap:4px;flex-wrap:wrap;align-items:center;padding:9px 20px;font-size:.82rem}
+.topnav a{padding:4px 9px;border-radius:7px;color:var(--muted)}
+.topnav a:hover{background:var(--blue-soft);color:var(--ink);text-decoration:none}
+.topnav .sp{flex:1}
+.topnav .home{color:var(--blue);font-weight:600}
+
+header{background:linear-gradient(180deg,var(--violet-soft),transparent);border-bottom:1px solid var(--line)}
+header .wrap{padding:40px 20px 32px}
+h1{font-size:clamp(1.7rem,4.2vw,2.35rem);margin:0 0 12px}
+.lede{font-size:1.08rem;color:var(--muted);max-width:68ch;margin:0}
+.hero-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.fact{background:var(--bg);border:1px solid var(--line);border-radius:999px;
+  padding:5px 13px;font-size:.84rem;color:var(--muted)}
+.fact b{color:var(--ink)}
+
+main{padding:26px 0 70px}
+section{margin-bottom:46px;scroll-margin-top:56px}
+.lead-in{color:var(--muted)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:16px 0}
+.card h3,.card h4{margin-top:0}
+
+.note{border-radius:var(--radius);padding:14px 18px;margin:16px 0;border:1px solid var(--line);
+  border-left-width:5px;font-size:.96rem}
+.note .lbl{font-weight:700;display:block;margin-bottom:2px}
+.note p:first-of-type{margin-top:0}.note p:last-child{margin-bottom:0}
+.note.blue{background:var(--blue-soft);border-left-color:var(--blue)}.note.blue .lbl{color:var(--blue)}
+.note.green{background:var(--green-soft);border-left-color:var(--green)}.note.green .lbl{color:var(--green)}
+.note.amber{background:var(--amber-soft);border-left-color:var(--amber)}.note.amber .lbl{color:var(--amber)}
+.note.red{background:var(--red-soft);border-left-color:var(--red)}.note.red .lbl{color:var(--red)}
+.note.violet{background:var(--violet-soft);border-left-color:var(--violet)}.note.violet .lbl{color:var(--violet)}
+
+/* tool card */
+.tool{border:1px solid var(--line);border-radius:var(--radius);margin:18px 0;overflow:hidden}
+.tool-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  padding:14px 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+.tool-head h3{margin:0;font-size:1.14rem}
+.tool-head .what{font-size:.88rem;color:var(--muted)}
+.badge{font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:3px 9px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.badge.t{color:var(--blue)}
+.badge.m{color:var(--violet)}
+.badge.n{color:var(--green)}
+.badge.free{color:var(--green)}
+.badge.paid{color:var(--amber)}
+.tool-body{padding:4px 18px 16px}
+.facts{display:grid;grid-template-columns:120px 1fr;gap:6px 14px;margin:14px 0;font-size:.94rem}
+.facts dt{font-weight:700;color:var(--muted);font-size:.85rem;padding-top:2px}
+.facts dd{margin:0}
+ol.setup{padding-left:1.3em;margin:8px 0}
+ol.setup li{margin:7px 0}
+.goto{font-size:.92rem;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+
+.diagram{width:100%;height:auto;display:block;background:var(--panel);
+  border:1px solid var(--line);border-radius:var(--radius);margin:18px 0}
+.dg text{font-family:var(--sans)}
+.caption{font-size:.85rem;color:var(--muted);text-align:center;margin:-8px 0 22px}
+
+.codebox{position:relative;margin:12px 0}
+pre{margin:0;background:#0d1117;color:#e6edf3;border-radius:var(--radius);
+  padding:14px;padding-right:80px;overflow-x:auto;font-family:var(--mono);font-size:.82rem;line-height:1.6;
+  white-space:pre-wrap;word-break:break-word}
+pre code{font-family:inherit;color:inherit}
+.copy{position:absolute;top:9px;right:9px;font:700 .66rem/1 var(--sans);letter-spacing:.06em;
+  text-transform:uppercase;color:#cdd6e4;background:#242c3a;border:1px solid #3a4453;
+  border-radius:7px;padding:6px 9px;cursor:pointer;z-index:2}
+.copy:hover{background:#303948}
+.copy.ok{color:#7ee2a8;border-color:#2f6b48}
+
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.89rem}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-size:.77rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+tbody tr:nth-child(even){background:var(--panel)}
+code{font-family:var(--mono);font-size:.85em;background:var(--panel);
+  border:1px solid var(--line);border-radius:5px;padding:.1em .4em}
+ul{padding-left:1.25em}li{margin:6px 0}
+
+footer{border-top:1px solid var(--line);background:var(--panel)}
+footer .wrap{padding:26px 20px 44px;font-size:.88rem;color:var(--muted)}
+
+@media(max-width:620px){
+  .facts{grid-template-columns:1fr;gap:2px}
+  .facts dt{padding-top:8px}
+}
+@media print{.topnav,.copy{display:none}body{font-size:11.5pt}section{page-break-inside:avoid}a{color:inherit}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wrap">
+    <a class="home" href="./">&larr; The editor guide</a>
+    <span class="sp"></span>
+    <a href="#choose">How to choose</a>
+    <a href="#technical">Technical</a>
+    <a href="#middle">Middle</a>
+    <a href="#easy">Non-technical</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#where">Links</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <h1>Pick Your Tool</h1>
+    <p class="lede">Every practical way to put an AI model to work, sorted from most to least technical. For each one: what it is best at, how to set it up, what it costs, and where to get it. Prices and details verified October 2026.</p>
+    <div class="hero-facts">
+      <span class="fact"><b>9 tools</b></span>
+      <span class="fact">Free &rarr; $500/mo</span>
+      <span class="fact">Terminal &rarr; one-click app</span>
+      <span class="fact">Setup steps for each</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- how to choose -->
+  <section id="choose">
+    <h2>How to choose</h2>
+    <p class="lead-in">Two questions decide it. Ask them in this order.</p>
+
+    <h4>Question 1 &mdash; Who should run the model?</h4>
+    <p>An <strong>official assistant</strong> (ChatGPT, Claude) hides the model entirely: no key, no billing setup, no configuration. A <strong>bring-your-own-key</strong> tool makes you supply an API key and pay the provider per token &mdash; cheaper and more flexible, but it is real setup. If the person is non-technical and the goal is "do things," pick an official assistant. If the goal is "use my cheap DeepSeek key," you need a BYO-key tool.</p>
+
+    <h4>Question 2 &mdash; Does it need to touch real files?</h4>
+    <p>Chat-only tools answer questions. Agent tools read and write <em>your</em> files, run commands, and produce artifacts. If the task is "make me a diagram in a chat" that is chat. If it is "reorganise this folder, edit this document, commit this change," you need an agent &mdash; and that is where the technical level goes up.</p>
+
+    <svg class="diagram dg" viewBox="0 0 900 300" role="img" aria-label="Decision flow: choose between official assistant and bring-your-own-key, then whether it needs file access">
+      <defs>
+        <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2f5bd7"/>
+        </marker>
+      </defs>
+      <rect x="330" y="18" width="240" height="54" rx="27" fill="#f1ebff" stroke="#6d3bd7" stroke-width="2"/>
+      <text x="450" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#1a1c22">Do you have (or want) an API key?</text>
+      <line x1="330" y1="45" x2="240" y2="88" stroke="#2f5bd7" stroke-width="3" marker-end="url(#c1)"/>
+      <text x="256" y="76" text-anchor="end" font-size="12.5" font-weight="700" fill="#1a7f4b">No</text>
+      <line x1="570" y1="45" x2="660" y2="88" stroke="#2f5bd7" stroke-width="3" marker-end="url(#c1)"/>
+      <text x="646" y="76" font-size="12.5" font-weight="700" fill="#6d3bd7">Yes</text>
+      <rect x="80" y="96" width="300" height="76" rx="14" fill="#e9f7ef" stroke="#1a7f4b" stroke-width="2"/>
+      <text x="230" y="126" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1a1c22">Official assistant</text>
+      <text x="230" y="150" text-anchor="middle" font-size="12" fill="#5b6273">ChatGPT desktop  ·  Claude Cowork</text>
+      <rect x="500" y="96" width="320" height="76" rx="14" fill="#f1ebff" stroke="#6d3bd7" stroke-width="2"/>
+      <text x="660" y="126" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1a1c22">Bring your own key</text>
+      <text x="660" y="150" text-anchor="middle" font-size="12" fill="#5b6273">Cherry Studio · Chatbox · Cline</text>
+      <line x1="230" y1="180" x2="230" y2="212" stroke="#2f5bd7" stroke-width="2.5" marker-end="url(#c1)"/>
+      <line x1="660" y1="180" x2="660" y2="212" stroke="#2f5bd7" stroke-width="2.5" marker-end="url(#c1)"/>
+      <rect x="80" y="220" width="300" height="62" rx="14" fill="#f6f7fa" stroke="#5b6273" stroke-width="2"/>
+      <text x="230" y="246" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1a1c22">Needs your files?</text>
+      <text x="230" y="268" text-anchor="middle" font-size="12" fill="#5b6273">Cowork + a paid plan</text>
+      <rect x="500" y="220" width="320" height="62" rx="14" fill="#f6f7fa" stroke="#5b6273" stroke-width="2"/>
+      <text x="660" y="246" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1a1c22">Needs to edit code / repos?</text>
+      <text x="660" y="268" text-anchor="middle" font-size="12" fill="#5b6273">Cline, or Cursor</text>
+    </svg>
+    <p class="caption">Diagram 1 &mdash; The two forks that decide the whole thing.</p>
+
+    <div class="note violet">
+      <span class="lbl">The trade-off in one sentence</span>
+      <p>Every step toward "easier" costs you control and money, and every step toward "cheaper per token" costs you setup. There is no tool that is both the easiest and the cheapest &mdash; you are choosing which of those you care about.</p>
+    </div>
+
+    <h4>Quick picks</h4>
+    <table>
+      <thead><tr><th>If you are&hellip;</th><th>Use</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Non-technical, want results today</td><td>ChatGPT desktop (free)</td><td>No key, no setup, still agentic</td></tr>
+        <tr><td>Non-technical, want polished docs &amp; files</td><td>Claude Desktop + Cowork ($20/mo)</td><td>Agentic access to your folders, no terminal</td></tr>
+        <tr><td>Want the cheapest capable option</td><td>Cherry Studio + DeepSeek key</td><td>2-minute install, DeepSeek pricing</td></tr>
+        <tr><td>Private / offline</td><td>AnythingLLM</td><td>Runs locally, can need no key at all</td></tr>
+        <tr><td>A developer</td><td>Cline in your editor</td><td>Agent in the repo, plan/approve/diff</td></tr>
+        <tr><td>In a terminal all day</td><td>Cline CLI</td><td>Same agent, scriptable, headless in CI</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- spectrum -->
+  <section id="spectrum">
+    <h2>The spectrum</h2>
+    <p class="lead-in">Left to right: from you doing the wiring, to nothing but a login.</p>
+
+    <svg class="diagram dg" viewBox="0 0 900 340" role="img" aria-label="Tools arranged from most technical on the left to least technical on the right">
+      <text x="30" y="28" font-size="13" font-weight="700" fill="#2f5bd7">MORE TECHNICAL</text>
+      <text x="870" y="28" text-anchor="end" font-size="13" font-weight="700" fill="#1a7f4b">LESS TECHNICAL</text>
+      <line x1="30" y1="40" x2="870" y2="40" stroke="#e2e5ec" stroke-width="3"/>
+      <line x1="30" y1="40" x2="330" y2="40" stroke="#2f5bd7" stroke-width="5"/>
+      <line x1="330" y1="40" x2="620" y2="40" stroke="#6d3bd7" stroke-width="5"/>
+      <line x1="620" y1="40" x2="870" y2="40" stroke="#1a7f4b" stroke-width="5"/>
+
+      <!-- technical band -->
+      <rect x="30" y="66" width="300" height="230" rx="14" fill="#eaf0ff" stroke="#2f5bd7" stroke-width="1.5"/>
+      <text x="180" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#2f5bd7">TECHNICAL</text>
+      <rect x="48" y="108" width="264" height="48" rx="10" fill="#ffffff" stroke="#2f5bd7"/>
+      <text x="62" y="130" font-size="12.5" font-weight="700" fill="#1a1c22">Cline CLI</text>
+      <text x="62" y="147" font-size="11" fill="#5b6273">terminal agent, headless in CI</text>
+      <rect x="48" y="164" width="264" height="48" rx="10" fill="#ffffff" stroke="#2f5bd7"/>
+      <text x="62" y="186" font-size="12.5" font-weight="700" fill="#1a1c22">Cline in an editor</text>
+      <text x="62" y="203" font-size="11" fill="#5b6273">VS Code, VSCodium, JetBrains, Zed</text>
+      <rect x="48" y="220" width="264" height="48" rx="10" fill="#ffffff" stroke="#2f5bd7"/>
+      <text x="62" y="242" font-size="12.5" font-weight="700" fill="#1a1c22">Cursor</text>
+      <text x="62" y="259" font-size="11" fill="#5b6273">polished IDE, own agent</text>
+
+      <!-- middle band -->
+      <rect x="342" y="66" width="266" height="230" rx="14" fill="#f1ebff" stroke="#6d3bd7" stroke-width="1.5"/>
+      <text x="475" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#6d3bd7">MIDDLE GROUND</text>
+      <rect x="358" y="108" width="234" height="48" rx="10" fill="#ffffff" stroke="#6d3bd7"/>
+      <text x="372" y="130" font-size="12.5" font-weight="700" fill="#1a1c22">DeepSeek Harness desktop</text>
+      <text x="372" y="147" font-size="11" fill="#5b6273">DeepSeek's own agent app</text>
+      <rect x="358" y="164" width="234" height="48" rx="10" fill="#ffffff" stroke="#6d3bd7"/>
+      <text x="372" y="186" font-size="12.5" font-weight="700" fill="#1a1c22">Cherry Studio</text>
+      <text x="372" y="203" font-size="11" fill="#5b6273">richest BYO-key desktop client</text>
+      <rect x="358" y="220" width="234" height="48" rx="10" fill="#ffffff" stroke="#6d3bd7"/>
+      <text x="372" y="242" font-size="12.5" font-weight="700" fill="#1a1c22">Chatbox</text>
+      <text x="372" y="259" font-size="11" fill="#5b6273">lightest, chat only</text>
+
+      <!-- easy band -->
+      <rect x="620" y="66" width="250" height="230" rx="14" fill="#e9f7ef" stroke="#1a7f4b" stroke-width="1.5"/>
+      <text x="745" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#1a7f4b">NON-TECHNICAL</text>
+      <rect x="636" y="108" width="218" height="64" rx="10" fill="#ffffff" stroke="#1a7f4b"/>
+      <text x="650" y="130" font-size="12.5" font-weight="700" fill="#1a1c22">AnythingLLM</text>
+      <text x="650" y="147" font-size="11" fill="#5b6273">local, no key needed,</text>
+      <text x="650" y="162" font-size="11" fill="#5b6273">chat with your documents</text>
+      <rect x="636" y="180" width="218" height="64" rx="10" fill="#ffffff" stroke="#1a7f4b"/>
+      <text x="650" y="202" font-size="12.5" font-weight="700" fill="#1a1c22">ChatGPT desktop</text>
+      <text x="650" y="219" font-size="11" fill="#5b6273">free tier, agentic,</text>
+      <text x="650" y="234" font-size="11" fill="#5b6273">reads your files</text>
+      <rect x="636" y="252" width="218" height="34" rx="10" fill="#ffffff" stroke="#1a7f4b"/>
+      <text x="650" y="274" font-size="12.5" font-weight="700" fill="#1a1c22">Claude Desktop + Cowork</text>
+    </svg>
+    <p class="caption">Diagram 2 &mdash; Nine tools, three bands. Detail on each below.</p>
+  </section>
+
+  <!-- TECHNICAL -->
+  <section id="technical">
+    <h2>Technical</h2>
+    <p class="lead-in">You wire it up, you supply the key, you manage the repo. Most control, least hand-holding.</p>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge t">Technical</span>
+        <h3>Cline CLI</h3>
+        <span class="what">The same agent as the editor extension, in a terminal.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>Developers who live in a shell, scripted tasks, headless runs in CI, reviewing a diff on the way past.</dd>
+          <dt>Cost</dt><dd>Free (open source). You pay for tokens via your own key, or use ClinePass at <strong>$9.99/mo</strong>.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Install Node 20 or newer, then install the CLI.</li>
+          <li>Run the auth wizard and pick your provider. For DeepSeek, give it the <code>sk-</code> key and model <code>deepseek-flash</code>.</li>
+          <li>Run an interactive session, or go headless in a script.</li>
+        </ol>
+        <div class="codebox">
+          <pre><code>npm i -g cline
+cline auth                      # pick provider + key
+cline                           # interactive TUI
+cline -p "plan this refactor"   # start in Plan
+cline --json "list TODOs"       # NDJSON, pipeable
+cline -y "run tests and fix"    # headless, auto-approve
+git diff | cline "review this"  # headless via a pipe</code></pre>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://docs.cline.bot/usage/cli-overview">docs.cline.bot/usage/cli-overview</a></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge t">Technical</span>
+        <h3>Cline in an editor</h3>
+        <span class="what">The agent panel beside your code &mdash; the workflow the companion guide covers.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>Working inside a real repository: multi-file edits, plans you approve, diffs you actually read. Runs in <strong>VS Code, VSCodium, Cursor, Windsurf, JetBrains</strong>, and via ACP in <strong>Zed</strong> and Neovim.</dd>
+          <dt>Cost</dt><dd>Extension free. Tokens via your own key, or ClinePass <strong>$9.99/mo</strong>.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Install your editor, then search <em>Cline</em> in the Extensions panel and install it.</li>
+          <li>Settings &rarr; <strong>API Provider: DeepSeek</strong> &rarr; paste your key &rarr; model <code>deepseek-flash</code>.</li>
+          <li>Open a project folder and work in Plan mode first.</li>
+        </ol>
+        <p>Full walkthrough, including <code>.clinerules/</code>, GitHub integration and gists, is in the companion guide.</p>
+        <p class="goto"><strong>Go to:</strong> <a href="./">AI in Your Editor</a> &middot; <a href="https://docs.cline.bot">docs.cline.bot</a></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge t">Technical</span>
+        <h3>Cursor</h3>
+        <span class="what">A polished AI IDE with its own agent. The window everyone recognises.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>People who want a finished, cohesive AI editor and will pay for polish. Its agent panel is the reference experience.</dd>
+          <dt>Cost</dt><dd>Free tier uses <em>Cursor's</em> models. Pro <strong>$20/mo</strong>, Pro Plus $60, Ultra $200. Bringing <em>your own</em> key for Agent, Composer, Edit or Ask requires Pro &mdash; custom keys are documented for chat models only.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Download and install Cursor; sign in. Free tier works immediately with Cursor's models.</li>
+          <li>To use DeepSeek without paying Cursor, install the <strong>Cline</strong> extension inside Cursor instead (Extensions &rarr; search Cline) and point Cline at your DeepSeek key. You get the same window, and Cline spends your key.</li>
+          <li>To use Cursor's own agent on DeepSeek, you need Pro.</li>
+        </ol>
+        <div class="note blue">
+          <span class="lbl">The free trick</span>
+          <p>Cursor is a VS Code fork, so Cline installs normally. That gives you Cursor's editor and agent window, driven by DeepSeek, on the free plan.</p>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://cursor.com">cursor.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MIDDLE -->
+  <section id="middle">
+    <h2>Middle ground</h2>
+    <p class="lead-in">A real desktop app &mdash; but you still supply a key. This is the sweet spot for cheap DeepSeek without a code editor.</p>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge m">Middle</span>
+        <h3>DeepSeek Harness (desktop)</h3>
+        <span class="what">DeepSeek's own desktop agent app, open source and MIT-licensed.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>Anyone who wants DeepSeek's own agent harness as a normal desktop app rather than a CLI. It also works with non-DeepSeek models over any OpenAI-compatible endpoint.</dd>
+          <dt>Cost</dt><dd>Free. You pay only for model usage &mdash; DeepSeek's key, or your own local model.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Download from DeepSeek's Harness page. Builds exist for <strong>Windows x64</strong> and <strong>Apple silicon Mac</strong>. The installer bundles Node, pnpm and Python, so there is nothing else to install.</li>
+          <li>Open it like any app and enter your model credentials when prompted.</li>
+          <li>No desktop build for your machine? Run the same interface in a browser with the npx command below.</li>
+        </ol>
+        <div class="codebox">
+          <pre><code>npx @deepseek-ai/dsh web</code></pre>
+        </div>
+        <div class="note amber">
+          <span class="lbl">It is a developer preview</span>
+          <p>DeepSeek describes the harness as a public preview and warns that compatibility-breaking changes will follow between builds. Fine for trying, worth knowing before you rely on it.</p>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://www.deepseek.com/en/harness/">deepseek.com/en/harness</a></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge m">Middle</span>
+        <h3>Cherry Studio</h3>
+        <span class="what">The richest free desktop client. Paste a key and you have a full assistant.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>The best balance of easy and capable. Native DeepSeek support, a knowledge base, documents, agents, and 300+ preset assistants. This is the one to recommend to a competent non-technical person who will tolerate a settings screen.</dd>
+          <dt>Cost</dt><dd>Free and open source. You pay the model provider directly &mdash; at DeepSeek rates that is fractions of a cent per question.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Download the installer for your platform (Windows, macOS, Linux) and open Cherry Studio.</li>
+          <li>Click the gear icon &rarr; <strong>Model Provider</strong> &rarr; select <strong>DeepSeek</strong> from the built-in list.</li>
+          <li>Paste your API key. Leave the API Host as the default <code>https://api.deepseek.com</code>.</li>
+          <li>Click <strong>Fetch model list</strong>, add <code>deepseek-flash</code> (and <code>deepseek-v4-pro</code> if you want the heavier one), then toggle the provider on.</li>
+          <li>Open the Agents tab to create a named assistant, or just start chatting.</li>
+        </ol>
+        <p class="goto"><strong>Go to:</strong> <a href="https://cherry-ai.com">cherry-ai.com</a> &middot; <a href="https://github.com/deepseek-ai/awesome-deepseek-agent/blob/main/docs/cherry_studio.md">DeepSeek's own Cherry Studio guide</a></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge m">Middle</span>
+        <h3>Chatbox</h3>
+        <span class="what">The lightest possible key-based chat app. Zero configuration beyond the key.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>Someone who wants exactly one thing: a clean chat window on their own cheap model. No knowledge base, no agents, almost no settings.</dd>
+          <dt>Cost</dt><dd>Free and open source. Provider tokens only.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Download the desktop app and open it.</li>
+          <li>Open Settings &rarr; add a provider. <strong>DeepSeek</strong> is a built-in option; otherwise choose <em>OpenAI-compatible</em> with base URL <code>https://api.deepseek.com/v1</code>.</li>
+          <li>Paste the key, set the model to <code>deepseek-flash</code>, and chat.</li>
+        </ol>
+        <div class="note amber">
+          <span class="lbl">When not to pick this</span>
+          <p>If you want it to remember your documents or hold a knowledge base, choose Cherry Studio or AnythingLLM instead &mdash; Chatbox is deliberately chat-only.</p>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://chatboxai.app">chatboxai.app</a></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge n">Easy</span>
+        <h3>AnythingLLM</h3>
+        <span class="what">A private AI workspace that can run with no key and no account at all.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>Turning a pile of documents into something you can question. Runs entirely on your machine by default, which matters if the material is private.</dd>
+          <dt>Cost</dt><dd>Free desktop app. No API key needed for the default local setup; you can also point it at DeepSeek, OpenRouter, or a local model.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Download the desktop app (one installer, macOS/Windows/Linux) and open it.</li>
+          <li>The installer bundles a local model, an embedder, and a database, so the first chat works with no key. Accept the defaults.</li>
+          <li>Create a workspace, drag your documents in, and ask questions. Answers cite the source files.</li>
+          <li>Optional: swap the local model for DeepSeek in settings if you want faster, better answers.</li>
+        </ol>
+        <div class="note amber">
+          <span class="lbl">It has more knobs than the others</span>
+          <p>AnythingLLM is powerful but its settings are denser and its defaults occasionally need adjusting (agent mode in particular). If someone wants zero fuss, Cherry Studio is friendlier.</p>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://anythingllm.com">anythingllm.com</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EASY -->
+  <section id="easy">
+    <h2>Non-technical</h2>
+    <p class="lead-in">No key, no billing, no configuration. You log in and it works &mdash; and both of these are genuinely agentic now.</p>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge n">Easy</span>
+        <span class="badge free">Free tier</span>
+        <h3>ChatGPT desktop</h3>
+        <span class="what">Chat, Work and Codex in one app, with agentic work on every plan including Free.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>The easiest serious option. It reaches your local files, has a built-in browser, can drive your computer, and produces real deliverables &mdash; sheets, slides, documents, and small web apps. <strong>Work</strong> and <strong>Codex</strong> are available on every plan including Free, with limits.</dd>
+          <dt>Cost</dt><dd>Free $0 &middot; Go <strong>$8/mo</strong> &middot; Plus <strong>$20/mo</strong> &middot; Pro from <strong>$100/mo</strong> ($100 / $200 / $500 tiers). Work and Codex share one usage allowance.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Download the desktop app for Windows or Mac, or use the web app.</li>
+          <li>Sign in with an existing account, or create one free. No key, no billing.</li>
+          <li>Pick a tab: <strong>Chat</strong> for questions, <strong>Work</strong> for a multi-step task, <strong>Codex</strong> for code. On desktop, point it at local files when it asks.</li>
+        </ol>
+        <div class="note green">
+          <span class="lbl">Start here if unsure</span>
+          <p>If the goal is "stop deliberating and get something done," this is the answer. It costs nothing to try and there is genuinely nothing to configure.</p>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://chatgpt.com/download">chatgpt.com/download</a> &middot; <a href="https://chatgpt.com/pricing">chatgpt.com/pricing</a></p>
+      </div>
+    </div>
+
+    <div class="tool">
+      <div class="tool-head">
+        <span class="badge n">Easy</span>
+        <span class="badge paid">Paid</span>
+        <h3>Claude Desktop + Cowork</h3>
+        <span class="what">Claude Code's agentic power behind a visual interface. No terminal involved.</span>
+      </div>
+      <div class="tool-body">
+        <dl class="facts">
+          <dt>Best for</dt><dd>Non-technical people who want the agentic results &mdash; not just chat. Cowork reads and writes your local files directly, works on long multi-step jobs (research synthesis, file organisation, document generation), and produces real spreadsheets and presentations. It runs code in an isolated VM, and file access is limited to folders you connect.</dd>
+          <dt>Cost</dt><dd>Chat on desktop is free; <strong>Cowork requires a paid plan.</strong> Pro <strong>$20/mo</strong> ($17/mo billed annually) &middot; Max 5x $100/mo &middot; Max 20x $200/mo &middot; Team $20/seat/mo annually. Pro includes Claude Code, Cowork, Design and Science.</dd>
+        </dl>
+        <h4>Setup</h4>
+        <ol class="setup">
+          <li>Install Claude Desktop for macOS, Windows, or Linux (beta), and sign in.</li>
+          <li>On a paid plan, switch to the <strong>Cowork</strong> tab.</li>
+          <li>Connect the folders it is allowed to work in. It only sees what you connect.</li>
+          <li>Describe the job the way you would brief a person, and let it run. You can watch each step.</li>
+        </ol>
+        <div class="note amber">
+          <span class="lbl">This is the one that matches "I want it to just do the work"</span>
+          <p>Cowork is the closest thing to a hands-off assistant that still touches real files. The catch is the subscription &mdash; there is no free path to it.</p>
+        </div>
+        <p class="goto"><strong>Go to:</strong> <a href="https://claude.com/download">claude.com/download</a> &middot; <a href="https://claude.com/pricing">claude.com/pricing</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- pricing -->
+  <section id="pricing">
+    <h2>Pricing at a glance</h2>
+    <p class="lead-in">All figures USD, October 2026, individual plans. Verify before buying &mdash; this is the fastest-moving thing on the page.</p>
+
+    <table>
+      <thead><tr><th>Tool</th><th>Entry</th><th>Typical / paid</th><th>What you pay for</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cline</strong> (CLI or editor)</td><td>Free</td><td>ClinePass $9.99/mo, or tokens</td><td>Either your own key per token, or a flat sub for open models</td></tr>
+        <tr><td><strong>Cursor</strong></td><td>Free</td><td>Pro $20/mo; Plus $60; Ultra $200</td><td>Cursor's models; BYOK for the agent needs Pro</td></tr>
+        <tr><td><strong>DeepSeek Harness</strong></td><td>Free</td><td>Usage only</td><td>DeepSeek API tokens, or free local model</td></tr>
+        <tr><td><strong>Cherry Studio</strong></td><td>Free</td><td>Usage only</td><td>Provider tokens (DeepSeek is very cheap)</td></tr>
+        <tr><td><strong>Chatbox</strong></td><td>Free</td><td>Usage only</td><td>Provider tokens</td></tr>
+        <tr><td><strong>AnythingLLM</strong></td><td>Free</td><td>Optional</td><td>Nothing by default; tokens if you point it at a cloud model</td></tr>
+        <tr><td><strong>ChatGPT</strong></td><td>Free</td><td>Go $8; Plus $20; Pro $100&ndash;$500</td><td>The assistant itself; no key to manage</td></tr>
+        <tr><td><strong>Claude</strong></td><td>Free (chat only)</td><td>Pro $20; Max $100/$200</td><td>Cowork and Claude Code require paid</td></tr>
+        <tr><td><strong>DeepSeek API</strong> (the key itself)</td><td>&mdash;</td><td>$0.15 / $0.60 per 1M tokens, off-peak</td><td>Input / output on <code>deepseek-flash</code>; cache hits $0.003</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note blue">
+      <span class="lbl">How to read this</span>
+      <p>The tools are free; the <em>thinking</em> is what costs. Official assistants bundle it into a subscription and hide the plumbing. BYO-key tools hand you the metered version, where a month of ordinary chat typically costs a few dollars rather than twenty. The trade is setup and a key to look after.</p>
+    </div>
+  </section>
+
+  <!-- where -->
+  <section id="where">
+    <h2>Where to go</h2>
+    <h4>Keys and models</h4>
+    <ul>
+      <li>DeepSeek API keys and billing: <a href="https://platform.deepseek.com">platform.deepseek.com</a> (<a href="https://api-docs.deepseek.com/quick_start/pricing">pricing</a>)</li>
+      <li>DeepSeek free chat: <a href="https://chat.deepseek.com">chat.deepseek.com</a></li>
+      <li>OpenRouter (one key, many models): <a href="https://openrouter.ai">openrouter.ai</a></li>
+    </ul>
+    <h4>Tools</h4>
+    <ul>
+      <li>Cline docs: <a href="https://docs.cline.bot">docs.cline.bot</a> &middot; <a href="https://cline.bot/pricing">pricing</a></li>
+      <li>Cursor: <a href="https://cursor.com">cursor.com</a></li>
+      <li>DeepSeek Harness: <a href="https://www.deepseek.com/en/harness/">deepseek.com/en/harness</a></li>
+      <li>Cherry Studio: <a href="https://cherry-ai.com">cherry-ai.com</a></li>
+      <li>Chatbox: <a href="https://chatboxai.app">chatboxai.app</a></li>
+      <li>AnythingLLM: <a href="https://anythingllm.com">anythingllm.com</a></li>
+      <li>ChatGPT: <a href="https://chatgpt.com/download">chatgpt.com/download</a> &middot; <a href="https://chatgpt.com/pricing">pricing</a></li>
+      <li>Claude: <a href="https://claude.com/download">claude.com/download</a> &middot; <a href="https://claude.com/pricing">pricing</a></li>
+    </ul>
+    <h4>Companion guide</h4>
+    <p>The developer workflow &mdash; Cline in an editor, <code>.clinerules</code>, the GitHub integration, and gists &mdash; is covered in <a href="./">AI in Your Editor</a>.</p>
+
+    <div class="note red">
+      <span class="lbl">One rule for every tool here</span>
+      <p>Whatever you paste in leaves your machine and is processed by the provider, and an API key is as sensitive as a card number. Don't put credentials into a chat, and don't put customer data, financials, or anything under NDA into a tool your organisation hasn't approved.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Pick Your Tool</strong> &mdash; the AI landscape from technical to non-technical. Prices, plan names, and features verified October 2026 and correct at that time. This is the fastest-moving category in software; check the official pricing pages in section 6 before relying on any figure.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.querySelectorAll('.codebox').forEach(function(box){
+    var pre = box.querySelector('pre');
+    if(!pre) return;
+    var b = document.createElement('button');
+    b.className = 'copy'; b.type = 'button'; b.textContent = 'Copy';
+    b.addEventListener('click', function(){
+      var text = pre.innerText;
+      var done = function(){ b.textContent='Copied'; b.classList.add('ok');
+        setTimeout(function(){ b.textContent='Copy'; b.classList.remove('ok'); },1600); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta=document.createElement('textarea'); ta.value=text;
+        document.body.appendChild(ta); ta.select();
+        try{document.execCommand('copy');}catch(e){}
+        document.body.removeChild(ta); done();
+      }
+    });
+    box.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

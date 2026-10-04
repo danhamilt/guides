@@ -10,9 +10,10 @@ Live at **https://danhamilt.github.io/guides/**
 
 ## Contents
 
-- `index.html` — the guide (single self-contained file, no dependencies)
+- `index.html` — the developer guide (single self-contained file, no dependencies)
+- `tools.html` — the tool landscape: technical to non-technical
 
-## What it covers
+## What the developer guide covers
 
 1. The mental model — the agent loop, Plan/Act, context, tokens
 2. Setup — VS Code, the Cline extension, a DeepSeek key, model choice and cost
@@ -32,3 +33,14 @@ SVG, and the small amount of JavaScript handles copy buttons and the saved check
 
 Tooling details (model names, `gh` and `cline` flags, extension behaviour) reflect October 2026
 and are the first thing to check if something stops matching reality.
+
+## What the tool landscape covers
+
+Nine tools sorted into three bands, each with best-for, setup steps, cost and links:
+
+- **Technical** — Cline CLI, Cline in an editor, Cursor
+- **Middle** — DeepSeek Harness desktop, Cherry Studio, Chatbox, AnythingLLM
+- **Non-technical** — ChatGPT desktop, Claude Desktop + Cowork
+
+Plus a decision diagram, quick picks, and a pricing-at-a-glance table. Plan prices and names move
+fast; the pricing table is the first thing to re-check.
