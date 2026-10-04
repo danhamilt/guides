@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your First AI Helper — A Gentle Step-by-Step Guide</title>
+<meta name="description" content="A friendly, picture-by-picture guide for getting an AI helper set up on your computer: install the editor, add the helper, make diagrams and web pages, and put them on the internet. No experience needed.">
+<style>
+:root{
+  --bg:#ffffff; --ink:#1a1c22; --muted:#5b6273; --line:#e2e5ec; --panel:#f6f7fa;
+  --blue:#2f5bd7; --blue-soft:#eaf0ff; --green:#1a7f4b; --green-soft:#e9f7ef;
+  --amber:#8a5a00; --amber-soft:#fff7e6; --red:#b42318; --red-soft:#fdecea;
+  --radius:14px; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1116; --ink:#e9ecf2; --muted:#a3abbb; --line:#262b35; --panel:#161a21;
+    --blue:#8aa5ff; --blue-soft:#161d33; --green:#5fd39b; --green-soft:#10231a;
+    --amber:#e8b75a; --amber-soft:#241d0c; --red:#ff8b7d; --red-soft:#2a1512;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.25;letter-spacing:-.01em}
+h2{font-size:1.5rem;margin:0 0 4px;padding-bottom:10px;border-bottom:3px solid var(--blue);display:inline-block}
+h3{font-size:1.12rem;margin:26px 0 6px}
+p{margin:12px 0}
+
+/* header */
+header{background:linear-gradient(180deg,var(--blue-soft),transparent);border-bottom:1px solid var(--line)}
+header .wrap{padding:44px 20px 34px}
+h1{font-size:clamp(1.7rem,4.4vw,2.4rem);margin:0 0 12px}
+.lede{font-size:1.1rem;color:var(--muted);max-width:62ch;margin:0}
+.hero-facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.fact{background:var(--bg);border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;font-size:.86rem;color:var(--muted)}
+.fact b{color:var(--ink)}
+
+/* progress */
+.progressbar{position:sticky;top:0;z-index:20;background:var(--bg);
+  border-bottom:1px solid var(--line);padding:10px 0}
+.progressbar .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.track{flex:1;min-width:160px;height:12px;background:var(--panel);
+  border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.track > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),#57c98a);transition:width .35s}
+.pcount{font-size:.86rem;color:var(--muted);white-space:nowrap}
+.pcount b{color:var(--ink)}
+.btn{font:inherit;font-size:.86rem;cursor:pointer;border:1px solid var(--line);
+  background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 14px}
+.btn:hover{border-color:var(--muted)}
+.btn.small{padding:5px 11px;font-size:.8rem}
+
+main{padding:28px 0 80px}
+section{margin-bottom:44px;scroll-margin-top:70px}
+
+/* cards + callouts */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin:16px 0}
+.card h3{margin-top:0}
+.note{border-radius:var(--radius);padding:14px 18px;margin:16px 0;border:1px solid var(--line);
+  border-left-width:5px;font-size:.97rem}
+.note .lbl{font-weight:700;display:block;margin-bottom:2px}
+.note p:first-of-type{margin-top:0}.note p:last-child{margin-bottom:0}
+.note.blue{background:var(--blue-soft);border-left-color:var(--blue)}
+.note.blue .lbl{color:var(--blue)}
+.note.green{background:var(--green-soft);border-left-color:var(--green)}
+.note.green .lbl{color:var(--green)}
+.note.amber{background:var(--amber-soft);border-left-color:var(--amber)}
+.note.amber .lbl{color:var(--amber)}
+.note.red{background:var(--red-soft);border-left-color:var(--red)}
+.note.red .lbl{color:var(--red)}
+
+/* steps */
+.step{background:var(--bg);border:1px solid var(--line);border-left:6px solid var(--line);
+  border-radius:var(--radius);padding:18px 20px;margin:16px 0;transition:border-color .2s,background .2s}
+.step.done{border-left-color:var(--green);background:linear-gradient(0deg,var(--green-soft),var(--green-soft))}
+.step-head{display:flex;gap:14px;align-items:flex-start}
+.step input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:0 0 28px;width:28px;height:28px;
+  border:2px solid var(--muted);border-radius:8px;cursor:pointer;margin:2px 0 0;background:var(--bg);
+  display:grid;place-items:center;position:relative}
+.step input[type=checkbox]:checked{background:var(--green);border-color:var(--green)}
+.step input[type=checkbox]:checked::after{content:"";position:absolute;width:7px;height:14px;
+  border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-2px)}
+.step-title{font-size:1.14rem;font-weight:700;margin:0}
+.step-title .num{color:var(--blue);margin-right:8px}
+.step-body{margin-left:42px}
+.step.done .step-title{color:var(--green)}
+@media(max-width:620px){.step-body{margin-left:0}}
+
+/* diagrams */
+.diagram{width:100%;height:auto;display:block;background:var(--panel);
+  border:1px solid var(--line);border-radius:var(--radius);margin:18px 0}
+.dg{font-family:var(--sans)}
+.dg text{font-family:var(--sans)}
+.caption{font-size:.86rem;color:var(--muted);text-align:center;margin:-8px 0 22px}
+
+/* code + prompt cards */
+.codebox{position:relative;margin:14px 0}
+pre{margin:0;background:#0d1117;color:#e6edf3;border-radius:var(--radius);
+  padding:16px;padding-right:86px;overflow-x:auto;font-family:var(--mono);font-size:.85rem;line-height:1.6;
+  white-space:pre-wrap;word-break:break-word}
+pre code{font-family:inherit;color:inherit}
+.copy{position:absolute;top:10px;right:10px;font:700 .7rem/1 var(--sans);letter-spacing:.06em;
+  text-transform:uppercase;color:#cdd6e4;background:#242c3a;border:1px solid #3a4453;
+  border-radius:7px;padding:7px 10px;cursor:pointer}
+.copy:hover{background:#303948}
+.copy.ok{color:#7ee2a8;border-color:#2f6b48}
+.prompt{border:1px solid var(--line);border-radius:var(--radius);margin:14px 0;overflow:hidden}
+.prompt .ph{background:var(--panel);padding:9px 15px;font-weight:700;font-size:.9rem;border-bottom:1px solid var(--line)}
+.prompt .pb{padding:14px 16px;font-size:1rem}
+
+/* tables */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.93rem}
+th,td{border:1px solid var(--line);padding:10px 13px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+tbody tr:nth-child(even){background:var(--panel)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);
+  border:1px solid var(--line);border-radius:5px;padding:.1em .4em}
+
+ul{padding-left:1.25em}li{margin:6px 0}
+
+/* final checklist */
+.tick{list-style:none;padding:0}
+.tick li{position:relative;padding-left:34px;margin:12px 0}
+.tick li::before{content:"";position:absolute;left:0;top:4px;width:20px;height:20px;
+  border-radius:50%;background:var(--green)}
+.tick li::after{content:"";position:absolute;left:6px;top:8px;width:6px;height:11px;
+  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+
+footer{border-top:1px solid var(--line);background:var(--panel)}
+footer .wrap{padding:26px 20px 46px;font-size:.9rem;color:var(--muted)}
+
+@media print{
+  .progressbar,.copy,.hero-actions{display:none}
+  body{font-size:12pt}
+  section{page-break-inside:avoid}
+  .step{border-left-color:var(--ink)}
+  a{color:inherit}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Your First AI Helper</h1>
+    <p class="lede">A gentle, picture-by-picture guide to setting up an AI assistant on your own computer &mdash; one that can draw diagrams and build little web pages for you. No experience needed. You cannot break anything.</p>
+    <div class="hero-facts">
+      <span class="fact"><b>About 30 minutes</b></span>
+      <span class="fact">Windows computer</span>
+      <span class="fact">Costs about <b>$5</b> to start</span>
+      <span class="fact">Written for beginners</span>
+    </div>
+    <div class="hero-actions" style="margin-top:18px">
+      <button class="btn" onclick="window.print()">Print this guide</button>
+    </div>
+  </div>
+</header>
+
+<div class="progressbar">
+  <div class="wrap">
+    <span class="pcount"><b id="pcount">0 of 5</b> steps done</span>
+    <span class="track"><i id="ptrack"></i></span>
+    <button class="btn small" id="resets">Start over</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1 -->
+  <section id="what">
+    <h2>1. What you are making</h2>
+    <p>Imagine a helper that sits inside a program on your computer. You type what you want in ordinary English &mdash; <em>"draw me a diagram of my garden"</em> or <em>"make me a birthday invitation as a web page"</em> &mdash; and it makes the file. Then, with one drag, you can put that file on the internet and send someone the link.</p>
+    <p>That is the whole idea. Here it is as a picture:</p>
+
+    <svg class="diagram dg" viewBox="0 0 860 250" role="img" aria-label="Three steps: your computer, you describe what you want, it appears on the web">
+      <defs>
+        <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2f5bd7"/>
+        </marker>
+      </defs>
+      <rect x="18" y="56" width="240" height="130" rx="16" fill="#eaf0ff" stroke="#2f5bd7" stroke-width="2"/>
+      <text x="138" y="94" text-anchor="middle" font-size="19" font-weight="700" fill="#1a1c22">1. Your computer</text>
+      <text x="138" y="122" text-anchor="middle" font-size="14" fill="#5b6273">A free editor, with an</text>
+      <text x="138" y="143" text-anchor="middle" font-size="14" fill="#5b6273">AI helper living inside it</text>
+      <line x1="266" y1="121" x2="312" y2="121" stroke="#2f5bd7" stroke-width="3" marker-end="url(#a1)"/>
+      <rect x="320" y="56" width="240" height="130" rx="16" fill="#eaf0ff" stroke="#2f5bd7" stroke-width="2"/>
+      <text x="440" y="94" text-anchor="middle" font-size="19" font-weight="700" fill="#1a1c22">2. You ask</text>
+      <text x="440" y="122" text-anchor="middle" font-size="14" fill="#5b6273">Type what you want in</text>
+      <text x="440" y="143" text-anchor="middle" font-size="14" fill="#5b6273">plain English</text>
+      <line x1="568" y1="121" x2="614" y2="121" stroke="#2f5bd7" stroke-width="3" marker-end="url(#a1)"/>
+      <rect x="622" y="56" width="220" height="130" rx="16" fill="#e9f7ef" stroke="#1a7f4b" stroke-width="2"/>
+      <text x="732" y="94" text-anchor="middle" font-size="19" font-weight="700" fill="#1a1c22">3. It goes online</text>
+      <text x="732" y="122" text-anchor="middle" font-size="14" fill="#5b6273">Drag it to the web and</text>
+      <text x="732" y="143" text-anchor="middle" font-size="14" fill="#5b6273">share a link</text>
+      <text x="430" y="226" text-anchor="middle" font-size="14" fill="#5b6273">You do steps 1 to 5 once. After that, you just keep asking.</text>
+    </svg>
+    <p class="caption">The whole journey, start to finish.</p>
+
+    <h3>Five words you will meet</h3>
+    <table>
+      <tbody>
+        <tr><th style="width:30%">Editor</th><td>The program on your computer where the work happens. We will use a free one called <strong>VS Code</strong>.</td></tr>
+        <tr><th>Helper</th><td>The AI assistant that sits inside the editor and does the typing. We will use one called <strong>Cline</strong>.</td></tr>
+        <tr><th>Key</th><td>A long secret password that lets the helper think. It looks like <code>sk-...</code>. You will get one from DeepSeek.</td></tr>
+        <tr><th>DeepSeek</th><td>The company that provides the "thinking". You pay them a few dollars as you go.</td></tr>
+        <tr><th>Folder</th><td>A place on your computer where your projects live. The helper can only see the folder you open.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note green">
+      <span class="lbl">The most important thing on this page</span>
+      <p>Nothing here can damage your computer. If something looks wrong, you can close the program and start again. There is no mistake you can make that cannot be undone.</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section id="before">
+    <h2>2. Before you start</h2>
+    <p>Have these ready. That is all you need.</p>
+    <ul>
+      <li>A Windows computer (this works on Mac too &mdash; the buttons just look slightly different).</li>
+      <li>An internet connection.</li>
+      <li>A payment card, for about <strong>$5</strong> of credit. Think of it like a coffee. It lasts a long time.</li>
+      <li>A phone or password notebook, to keep your secret key safe.</li>
+      <li>Half an hour, unhurried.</li>
+    </ul>
+    <div class="note amber">
+      <span class="lbl">A note on the $5</span>
+      <p>The helper charges you a tiny amount each time it thinks &mdash; usually a fraction of a cent. Five dollars is plenty to play with for a good while. You will set this up in Step 3.</p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section id="steps">
+    <h2>3. The five steps</h2>
+    <p>Tick each box as you finish it. Your ticks are saved, so you can close this page and come back.</p>
+
+    <!-- STEP 1 -->
+    <div class="step" data-step>
+      <div class="step-head">
+        <input type="checkbox" aria-label="Mark step 1 done">
+        <p class="step-title"><span class="num">Step 1.</span> Get the editor (VS Code)</p>
+      </div>
+      <div class="step-body">
+        <p>This is the free program where everything happens.</p>
+        <ol>
+          <li>Open your web browser and go to <a href="https://code.visualstudio.com">code.visualstudio.com</a>.</li>
+          <li>Click the big blue button that says <strong>Download for Windows</strong>.</li>
+          <li>When the download finishes, click the file it saved (it will be in your <em>Downloads</em> folder, named something like <code>VSCodeUserSetup</code>).</li>
+          <li>Click <strong>Next</strong> through the installer and then <strong>Install</strong>. You do not need to change any of the options.</li>
+          <li>When it finishes, VS Code will open. It may look plain and a little technical. That is normal.</li>
+        </ol>
+
+        <svg class="diagram dg" viewBox="0 0 760 400" role="img" aria-label="The VS Code website with the Download for Windows button highlighted">
+          <defs>
+            <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#b42318"/>
+            </marker>
+          </defs>
+          <rect x="14" y="14" width="732" height="372" rx="12" fill="#ffffff" stroke="#e2e5ec"/>
+          <rect x="14" y="14" width="732" height="42" rx="12" fill="#f6f7fa"/>
+          <circle cx="42" cy="35" r="6" fill="#ff5f57"/><circle cx="64" cy="35" r="6" fill="#febc2e"/><circle cx="86" cy="35" r="6" fill="#28c840"/>
+          <rect x="118" y="24" width="600" height="22" rx="11" fill="#ffffff" stroke="#e2e5ec"/>
+          <text x="132" y="39" font-size="13" fill="#5b6273">code.visualstudio.com</text>
+          <text x="60" y="120" font-size="26" font-weight="700" fill="#1a1c22">Code editing.</text>
+          <text x="60" y="152" font-size="26" font-weight="700" fill="#1a1c22">Redefined.</text>
+          <text x="60" y="186" font-size="14" fill="#5b6273">Free. Built on open source. Runs everywhere.</text>
+          <rect x="60" y="214" width="230" height="52" rx="8" fill="#2f5bd7"/>
+          <text x="175" y="246" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Download for Windows</text>
+          <circle cx="322" cy="240" r="17" fill="#b42318"/>
+          <text x="322" y="246" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">1</text>
+          <line x1="345" y1="240" x2="415" y2="240" stroke="#b42318" stroke-width="3" marker-end="url(#a2)"/>
+          <text x="428" y="236" font-size="14" fill="#b42318" font-weight="700">Click this</text>
+          <text x="428" y="256" font-size="13" fill="#5b6273">the button, not the arrow</text>
+          <rect x="60" y="300" width="660" height="60" rx="10" fill="#f6f7fa" stroke="#e2e5ec"/>
+          <text x="78" y="326" font-size="13" fill="#5b6273">If the button says something else, look for a small</text>
+          <text x="78" y="346" font-size="13" fill="#5b6273">"Windows" arrow beside it and choose the top option.</text>
+        </svg>
+        <p class="caption">Diagram 1 &mdash; The VS Code download page. Click the blue button.</p>
+
+        <div class="note blue">
+          <span class="lbl">What success looks like</span>
+          <p>You have a program called <strong>Visual Studio Code</strong> you can open from your Start menu. Its icon is a small blue ribbon.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" data-step>
+      <div class="step-head">
+        <input type="checkbox" aria-label="Mark step 2 done">
+        <p class="step-title"><span class="num">Step 2.</span> Add the AI helper (Cline)</p>
+      </div>
+      <div class="step-body">
+        <p>Cline is a free add-on for VS Code. It is the friendly face you will actually talk to.</p>
+        <ol>
+          <li>With VS Code open, look at the tall strip of icons down the far left. Click the one that looks like <strong>four small squares</strong> (it is called Extensions, and there is a badge on it).</li>
+          <li>A panel opens. Click the search box at the top and type <strong>Cline</strong>.</li>
+          <li>The first result should be called <strong>Cline</strong>. Click its <strong>Install</strong> button.</li>
+          <li>Wait a moment. When it is installed, a small robot face appears in that left-hand strip. Click it.</li>
+        </ol>
+
+        <svg class="diagram dg" viewBox="0 0 780 420" role="img" aria-label="VS Code with the Extensions panel open and Cline being installed">
+          <defs>
+            <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#b42318"/>
+            </marker>
+          </defs>
+          <rect x="14" y="14" width="752" height="392" rx="12" fill="#ffffff" stroke="#e2e5ec"/>
+          <rect x="14" y="14" width="752" height="34" rx="12" fill="#f6f7fa"/>
+          <text x="34" y="36" font-size="13" fill="#5b6273">Visual Studio Code</text>
+          <rect x="14" y="48" width="52" height="358" fill="#f6f7fa"/>
+          <!-- activity bar icons -->
+          <rect x="30" y="72" width="20" height="20" rx="4" fill="#c8cede"/>
+          <rect x="28" y="112" width="24" height="24" rx="5" fill="#eaf0ff" stroke="#2f5bd7" stroke-width="2"/>
+          <rect x="33" y="118" width="6" height="6" fill="#2f5bd7"/><rect x="41" y="118" width="6" height="6" fill="#2f5bd7"/>
+          <rect x="33" y="126" width="6" height="6" fill="#2f5bd7"/><rect x="41" y="126" width="6" height="6" fill="#2f5bd7"/>
+          <circle cx="52" cy="116" r="8" fill="#b42318"/><text x="52" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+          <rect x="30" y="166" width="20" height="20" rx="4" fill="#c8cede"/>
+          <rect x="30" y="206" width="20" height="20" rx="4" fill="#c8cede"/>
+          <!-- side panel -->
+          <rect x="66" y="48" width="250" height="358" fill="#fbfcfe" stroke="#e2e5ec"/>
+          <text x="82" y="80" font-size="12" font-weight="700" fill="#5b6273">EXTENSIONS</text>
+          <rect x="82" y="94" width="218" height="30" rx="6" fill="#ffffff" stroke="#2f5bd7" stroke-width="2"/>
+          <text x="94" y="114" font-size="13" fill="#1a1c22">Cline</text>
+          <circle cx="322" cy="109" r="15" fill="#b42318"/><text x="322" y="114" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">2</text>
+          <!-- result card -->
+          <rect x="82" y="140" width="218" height="104" rx="8" fill="#ffffff" stroke="#e2e5ec"/>
+          <rect x="94" y="152" width="30" height="30" rx="7" fill="#eaf0ff" stroke="#2f5bd7"/>
+          <text x="134" y="166" font-size="14" font-weight="700" fill="#1a1c22">Cline</text>
+          <text x="134" y="184" font-size="11.5" fill="#5b6273">Autonomous coding agent</text>
+          <rect x="94" y="204" width="86" height="28" rx="6" fill="#2f5bd7"/>
+          <text x="137" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Install</text>
+          <circle cx="196" cy="218" r="15" fill="#b42318"/><text x="196" y="223" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">3</text>
+          <!-- callout text -->
+          <line x1="70" y1="124" x2="70" y2="330" stroke="#b42318" stroke-width="2" stroke-dasharray="4 4"/>
+          <text x="330" y="230" font-size="14" font-weight="700" fill="#b42318">Click here first</text>
+          <text x="330" y="252" font-size="13.5" fill="#5b6273">the four squares = Extensions</text>
+          <text x="330" y="292" font-size="14" font-weight="700" fill="#b42318">Then type "Cline"</text>
+          <text x="330" y="314" font-size="13.5" fill="#5b6273">and press the Install button</text>
+        </svg>
+        <p class="caption">Diagram 2 &mdash; Finding and installing Cline.</p>
+
+        <div class="note blue">
+          <span class="lbl">What success looks like</span>
+          <p>A small robot face appears in the left strip, and a chat panel opens on the right. It will ask you to set up a "provider" &mdash; that is Step 4. Do not worry about it yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" data-step>
+      <div class="step-head">
+        <input type="checkbox" aria-label="Mark step 3 done">
+        <p class="step-title"><span class="num">Step 3.</span> Get your secret key from DeepSeek</p>
+      </div>
+      <div class="step-body">
+        <p>This is the part that sounds technical but is really just filling in a form and copying a password. Take it slowly.</p>
+        <ol>
+          <li>In your browser, go to <a href="https://platform.deepseek.com">platform.deepseek.com</a> and click <strong>Sign up</strong>. Use your email address. Check your email for a code and type it in.</li>
+          <li>Find <strong>Billing</strong> in the menu on the left, and add about <strong>$5</strong> of credit. (The page may show prices in a different currency, like &yen;. That is normal &mdash; pick the smallest top-up.)</li>
+          <li>Now click <strong>API Keys</strong> in the same left-hand menu, then click <strong>Create new API key</strong>.</li>
+          <li>Give it a name you will recognise later, like <code>my-laptop</code>. Click create.</li>
+          <li>A long code starting with <code>sk-</code> appears. <strong>Copy it right now</strong> &mdash; it is shown only once. Paste it into your phone's notes or a password notebook and save it.</li>
+        </ol>
+
+        <svg class="diagram dg" viewBox="0 0 800 430" role="img" aria-label="The DeepSeek website showing Billing, API Keys, and the created key">
+          <defs>
+            <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#b42318"/>
+            </marker>
+          </defs>
+          <rect x="14" y="14" width="772" height="402" rx="12" fill="#ffffff" stroke="#e2e5ec"/>
+          <rect x="14" y="14" width="772" height="40" rx="12" fill="#f6f7fa"/>
+          <circle cx="42" cy="34" r="6" fill="#ff5f57"/><circle cx="64" cy="34" r="6" fill="#febc2e"/><circle cx="86" cy="34" r="6" fill="#28c840"/>
+          <rect x="116" y="23" width="640" height="22" rx="11" fill="#ffffff" stroke="#e2e5ec"/>
+          <text x="130" y="38" font-size="13" fill="#5b6273">platform.deepseek.com</text>
+          <!-- sidebar -->
+          <rect x="22" y="62" width="188" height="344" rx="8" fill="#f6f7fa"/>
+          <text x="40" y="94" font-size="12.5" fill="#5b6273">Dashboard</text>
+          <rect x="30" y="112" width="172" height="32" rx="7" fill="#fff7e6" stroke="#8a5a00" stroke-width="2"/>
+          <text x="40" y="133" font-size="13" font-weight="700" fill="#8a5a00">Billing</text>
+          <circle cx="216" cy="128" r="15" fill="#b42318"/><text x="216" y="133" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">1</text>
+          <rect x="30" y="156" width="172" height="32" rx="7" fill="#ffffff" stroke="#2f5bd7" stroke-width="2"/>
+          <text x="40" y="177" font-size="13" font-weight="700" fill="#2f5bd7">API Keys</text>
+          <circle cx="216" cy="172" r="15" fill="#b42318"/><text x="216" y="177" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">2</text>
+          <text x="40" y="214" font-size="12.5" fill="#5b6273">Usage</text>
+          <text x="40" y="246" font-size="12.5" fill="#5b6273">Settings</text>
+          <!-- main panel -->
+          <text x="232" y="96" font-size="17" font-weight="700" fill="#1a1c22">API Keys</text>
+          <rect x="232" y="112" width="176" height="40" rx="8" fill="#2f5bd7"/>
+          <text x="320" y="137" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">Create new API key</text>
+          <circle cx="422" cy="132" r="15" fill="#b42318"/><text x="422" y="137" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">3</text>
+          <!-- modal -->
+          <rect x="232" y="176" width="516" height="196" rx="12" fill="#fbfcfe" stroke="#2f5bd7" stroke-width="2"/>
+          <text x="256" y="208" font-size="15" font-weight="700" fill="#1a1c22">Your new key</text>
+          <text x="256" y="234" font-size="13" fill="#8a5a00">Save this now. It will not be shown again.</text>
+          <rect x="256" y="248" width="468" height="42" rx="8" fill="#ffffff" stroke="#e2e5ec"/>
+          <text x="272" y="275" font-size="15" font-family="monospace" fill="#1a1c22">sk-8f3a.........................</text>
+          <rect x="630" y="256" width="84" height="28" rx="6" fill="#eaf0ff" stroke="#2f5bd7"/>
+          <text x="672" y="275" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2f5bd7">Copy</text>
+          <circle cx="726" cy="270" r="15" fill="#b42318"/><text x="726" y="275" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">4</text>
+          <text x="256" y="322" font-size="13" fill="#5b6273">Paste it somewhere safe now, the way you would a card number.</text>
+          <text x="256" y="348" font-size="13" fill="#5b6273">You will need it in the very next step.</text>
+        </svg>
+        <p class="caption">Diagram 3 &mdash; Top up, then create and copy your key.</p>
+
+        <div class="note red">
+          <span class="lbl">Treat the key like a card number</span>
+          <p>Never put it in an email, a text message, a photo, or a shared document. Anyone who has it can spend your credit. Keep it in your password notebook, and in the box in the next step. Nowhere else.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" data-step>
+      <div class="step-head">
+        <input type="checkbox" aria-label="Mark step 4 done">
+        <p class="step-title"><span class="num">Step 4.</span> Introduce the helper to your key</p>
+      </div>
+      <div class="step-body">
+        <p>Now we tell Cline where to think. This is copy-and-paste &mdash; no typing of long codes.</p>
+        <ol>
+          <li>Back in VS Code, click the little robot face in the left strip to open Cline.</li>
+          <li>Click the small <strong>gear</strong> (settings) icon at the top of the Cline panel.</li>
+          <li>Find the box called <strong>API Provider</strong> and choose <strong>DeepSeek</strong> from the list.</li>
+          <li>Paste your key into the <strong>API Key</strong> box.</li>
+          <li>For the model, choose <strong><code>deepseek-flash</code></strong>. If you do not see it in the list, type it in by hand exactly like that, all lowercase.</li>
+          <li>Click <strong>Done</strong> or <strong>Save</strong>.</li>
+        </ol>
+
+        <svg class="diagram dg" viewBox="0 0 760 410" role="img" aria-label="Cline settings showing the DeepSeek provider, the key pasted, and the model name">
+          <defs>
+            <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#b42318"/>
+            </marker>
+          </defs>
+          <rect x="14" y="14" width="732" height="382" rx="12" fill="#ffffff" stroke="#e2e5ec"/>
+          <rect x="14" y="14" width="732" height="36" rx="12" fill="#f6f7fa"/>
+          <text x="34" y="37" font-size="13" fill="#5b6273">Cline &mdash; Settings</text>
+          <text x="52" y="86" font-size="16" font-weight="700" fill="#1a1c22">Choose your AI brain</text>
+          <!-- provider -->
+          <text x="52" y="126" font-size="13" font-weight="700" fill="#5b6273">API Provider</text>
+          <rect x="52" y="136" width="300" height="40" rx="8" fill="#ffffff" stroke="#2f5bd7" stroke-width="2"/>
+          <text x="68" y="162" font-size="14" fill="#1a1c22">DeepSeek</text>
+          <path d="M322,150 l8,10 l8,-10" fill="none" stroke="#2f5bd7" stroke-width="2.5"/>
+          <circle cx="380" cy="156" r="15" fill="#b42318"/><text x="380" y="161" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">1</text>
+          <!-- key -->
+          <text x="52" y="212" font-size="13" font-weight="700" fill="#5b6273">API Key</text>
+          <rect x="52" y="222" width="470" height="40" rx="8" fill="#ffffff" stroke="#e2e5ec"/>
+          <text x="68" y="248" font-size="14" font-family="monospace" fill="#1a1c22">sk-8f3a.........................</text>
+          <circle cx="546" cy="242" r="15" fill="#b42318"/><text x="546" y="247" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">2</text>
+          <!-- model -->
+          <text x="52" y="298" font-size="13" font-weight="700" fill="#5b6273">Model</text>
+          <rect x="52" y="308" width="300" height="40" rx="8" fill="#ffffff" stroke="#e2e5ec"/>
+          <text x="68" y="334" font-size="14" font-family="monospace" fill="#1a1c22">deepseek-flash</text>
+          <circle cx="380" cy="328" r="15" fill="#b42318"/><text x="380" y="333" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">3</text>
+          <rect x="576" y="308" width="120" height="40" rx="8" fill="#2f5bd7"/>
+          <text x="636" y="333" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">Done</text>
+          <circle cx="712" cy="328" r="15" fill="#b42318"/><text x="712" y="333" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">4</text>
+        </svg>
+        <p class="caption">Diagram 4 &mdash; Three boxes and a button. That is the whole setup.</p>
+
+        <div class="note amber">
+          <span class="lbl">If the model list shows old names</span>
+          <p>If you see <code>deepseek-chat</code> or <code>deepseek-reasoner</code> in the list, ignore them &mdash; they are retired and no longer work. Type <code>deepseek-flash</code> in by hand instead.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step" data-step>
+      <div class="step-head">
+        <input type="checkbox" aria-label="Mark step 5 done">
+        <p class="step-title"><span class="num">Step 5.</span> Ask it for something</p>
+      </div>
+      <div class="step-body">
+        <p>The moment you have been waiting for. First, make a home for your projects:</p>
+        <ol>
+          <li>On your Desktop, right-click &rarr; <strong>New</strong> &rarr; <strong>Folder</strong>. Name it <code>My Projects</code>.</li>
+          <li>In VS Code, click <strong>File</strong> &rarr; <strong>Open Folder</strong>, and choose that folder.</li>
+          <li>Click the robot face to open Cline, type this, and press Enter:</li>
+        </ol>
+        <div class="codebox">
+          <pre><code>Hello! Please make me a simple one-page website that says
+"Hello, my name is [your name]." Keep it colourful and friendly.
+Save it as a file called index.html in this folder.</code></pre>
+        </div>
+        <p>Cline will show you what it plans to do. Read it, then click <strong>Approve</strong> or <strong>Save</strong>. A new file appears on the left. Well done &mdash; you have made a web page.</p>
+
+        <svg class="diagram dg" viewBox="0 0 820 420" role="img" aria-label="VS Code with Cline chat panel on the right, a message typed, and an approve button">
+          <defs>
+            <marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#b42318"/>
+            </marker>
+          </defs>
+          <rect x="14" y="14" width="792" height="392" rx="12" fill="#ffffff" stroke="#e2e5ec"/>
+          <rect x="14" y="14" width="792" height="34" rx="12" fill="#f6f7fa"/>
+          <text x="34" y="36" font-size="13" fill="#5b6273">Visual Studio Code &mdash; My Projects</text>
+          <!-- explorer -->
+          <rect x="14" y="48" width="196" height="358" fill="#f6f7fa"/>
+          <text x="30" y="76" font-size="12" font-weight="700" fill="#5b6273">EXPLORER</text>
+          <text x="30" y="104" font-size="13" fill="#5b6273">MY PROJECTS</text>
+          <rect x="44" y="116" width="150" height="26" rx="5" fill="#e9f7ef" stroke="#1a7f4b"/>
+          <text x="56" y="134" font-size="12.5" fill="#1a7f4b">index.html  (new)</text>
+          <circle cx="252" cy="129" r="15" fill="#1a7f4b"/><text x="252" y="134" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">3</text>
+          <!-- chat panel -->
+          <rect x="430" y="48" width="376" height="358" fill="#fbfcfe" stroke="#e2e5ec"/>
+          <text x="448" y="80" font-size="14" font-weight="700" fill="#1a1c22">Cline</text>
+          <rect x="448" y="96" width="150" height="30" rx="15" fill="#eaf0ff" stroke="#2f5bd7"/>
+          <text x="470" y="116" font-size="12.5" font-weight="700" fill="#2f5bd7">Plan</text>
+          <text x="536" y="116" font-size="12.5" fill="#5b6273">Act</text>
+          <circle cx="614" cy="111" r="15" fill="#b42318"/><text x="614" y="116" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">2</text>
+          <rect x="448" y="150" width="340" height="92" rx="10" fill="#ffffff" stroke="#e2e5ec"/>
+          <text x="462" y="176" font-size="12.5" fill="#5b6273">You:</text>
+          <text x="462" y="198" font-size="12.5" fill="#1a1c22">Make me a one-page website</text>
+          <text x="462" y="218" font-size="12.5" fill="#1a1c22">that says "Hello, my name is</text>
+          <text x="462" y="238" font-size="12.5" fill="#1a1c22">[your name]"...</text>
+          <rect x="448" y="330" width="340" height="52" rx="10" fill="#ffffff" stroke="#2f5bd7" stroke-width="2"/>
+          <text x="462" y="362" font-size="12.5" fill="#5b6273">Type here, then press Enter</text>
+          <circle cx="772" cy="356" r="15" fill="#b42318"/><text x="772" y="361" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">1</text>
+        </svg>
+        <p class="caption">Diagram 5 &mdash; Talk to it in the panel on the right. Your new file appears on the left.</p>
+
+        <div class="note green">
+          <span class="lbl">That is it &mdash; you are set up</span>
+          <p>Everything from here on is just asking for more things. The next two sections show you the two most fun ones: drawing diagrams, and putting your page on the internet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="diagrams">
+    <h2>4. Making a diagram</h2>
+    <p>Asking for a diagram is the same as anything else &mdash; describe it in plain words. Try one of these:</p>
+    <div class="prompt"><div class="ph">Draw a diagram</div>
+      <div class="pb">Draw me a diagram of my family tree: me at the top, my two children below, and their children below that. Make it a Mermaid diagram so I can see the picture.</div></div>
+    <div class="prompt"><div class="ph">Explain something with a picture</div>
+      <div class="pb">Draw me a simple diagram of how a bill becomes a law, in six boxes with arrows. Keep the words short enough to fit in the boxes.</div></div>
+    <p>A "Mermaid diagram" is just a way of writing a picture in text. Cline can draw it for you and often shows you the picture straight away. If it only shows text, say: <em>"Show me the picture, not the code."</em></p>
+    <div class="note blue">
+      <span class="lbl">A good habit</span>
+      <p>If you do not like the result, just say so in ordinary words: <em>"Make the boxes bigger."</em> <em>"Use different colours."</em> <em>"Less text."</em> It will happily try again. You cannot wear it out.</p>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section id="publish">
+    <h2>5. Putting your page on the internet</h2>
+    <p>This is the best part. You will get a real web address you can text to your family. There is no coding and no account needed.</p>
+    <ol>
+      <li>Open your file folder (<code>My Projects</code>). Inside it you should see your <code>index.html</code> file.</li>
+      <li>Open a web browser and go to <a href="https://app.netlify.com/drop">app.netlify.com/drop</a>.</li>
+      <li>Drag your <code>index.html</code> file from the folder onto the big dashed box on that page. (If you have several files, drag the whole folder.)</li>
+      <li>Wait about ten seconds. A web address appears, ending in <code>netlify.app</code>. That is your own page, live on the internet.</li>
+      <li>Click it, then copy the address from the top of your browser and send it to anyone you like.</li>
+    </ol>
+
+    <svg class="diagram dg" viewBox="0 0 780 400" role="img" aria-label="Dragging a file onto the Netlify Drop page and getting a live web address">
+      <defs>
+        <marker id="a7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#2f5bd7"/>
+        </marker>
+      </defs>
+      <rect x="14" y="14" width="752" height="372" rx="12" fill="#ffffff" stroke="#e2e5ec"/>
+      <rect x="14" y="14" width="752" height="40" rx="12" fill="#f6f7fa"/>
+      <circle cx="42" cy="34" r="6" fill="#ff5f57"/><circle cx="64" cy="34" r="6" fill="#febc2e"/><circle cx="86" cy="34" r="6" fill="#28c840"/>
+      <rect x="116" y="23" width="620" height="22" rx="11" fill="#ffffff" stroke="#e2e5ec"/>
+      <text x="130" y="38" font-size="13" fill="#5b6273">app.netlify.com/drop</text>
+      <text x="390" y="96" text-anchor="middle" font-size="19" font-weight="700" fill="#1a1c22">Drag and drop to publish</text>
+      <rect x="150" y="120" width="480" height="150" rx="14" fill="#f6f7fa" stroke="#2f5bd7" stroke-width="3" stroke-dasharray="10 8"/>
+      <text x="390" y="188" text-anchor="middle" font-size="15" fill="#5b6273">Drop your file or folder here</text>
+      <text x="390" y="214" text-anchor="middle" font-size="13" fill="#5b6273">index.html</text>
+      <!-- folder being dragged -->
+      <rect x="24" y="150" width="72" height="54" rx="8" fill="#eaf0ff" stroke="#2f5bd7" stroke-width="2"/>
+      <rect x="24" y="142" width="30" height="14" rx="4" fill="#2f5bd7"/>
+      <text x="60" y="184" text-anchor="middle" font-size="11.5" fill="#2f5bd7">index.html</text>
+      <line x1="104" y1="178" x2="144" y2="182" stroke="#2f5bd7" stroke-width="3" marker-end="url(#a7)"/>
+      <circle cx="122" cy="160" r="15" fill="#b42318"/><text x="122" y="165" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">1</text>
+      <text x="60" y="232" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b42318">Drag this</text>
+      <!-- result -->
+      <rect x="210" y="300" width="360" height="46" rx="23" fill="#e9f7ef" stroke="#1a7f4b" stroke-width="2"/>
+      <text x="390" y="329" text-anchor="middle" font-size="15" font-weight="700" fill="#1a7f4b">your-name.netlify.app</text>
+      <circle cx="596" cy="323" r="15" fill="#b42318"/><text x="596" y="328" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">2</text>
+      <text x="690" y="320" font-size="12.5" font-weight="700" fill="#b42318">Your</text>
+      <text x="690" y="338" font-size="12.5" font-weight="700" fill="#b42318">link</text>
+    </svg>
+    <p class="caption">Diagram 6 &mdash; Drag the file in, get a link out.</p>
+
+    <div class="note green">
+      <span class="lbl">Congratulations</span>
+      <p>You have just built a page on the internet by describing it in English. That is a genuinely useful skill. Most people who have been doing this for years started exactly here.</p>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section id="prompts">
+    <h2>6. Things to try next</h2>
+    <p>Copy any of these into Cline, changing the bracketed parts. Half the trick is simply asking.</p>
+
+    <div class="prompt"><div class="ph">A card for someone</div>
+      <div class="pb">Make me a pretty birthday card as a web page, for my granddaughter who is turning 8. Pink and purple, with big friendly writing. Save it so I can send it to her.</div></div>
+
+    <div class="prompt"><div class="ph">Something useful</div>
+      <div class="pb">Make me a simple shopping list web page where I can type items and tick them off, and it saves what I typed even if I close the page.</div></div>
+
+    <div class="prompt"><div class="ph">Recipe collection</div>
+      <div class="pb">Make me a web page that shows my three favourite recipes as cards, side by side, with the ingredients and steps. Use warm colours and make it easy to read.</div></div>
+
+    <div class="prompt"><div class="ph">A timeline</div>
+      <div class="pb">Draw me a timeline diagram of my life: born in [year], moved to [place] in [year], and so on. I will give you the dates as you ask for them.</div></div>
+
+    <div class="prompt"><div class="ph">Explain something</div>
+      <div class="pb">Explain what a "smart home" is as if I were 12 years old, and then draw me a diagram of how the pieces fit together.</div></div>
+
+    <div class="prompt"><div class="ph">If you get stuck</div>
+      <div class="pb">I am a beginner and I am stuck. Please explain what I should click, one step at a time, in very plain English. Do not assume I know any technical words.</div></div>
+
+    <div class="note blue">
+      <span class="lbl">The magic sentence</span>
+      <p>Whenever you are unsure, add: <em>"Explain this to me like I am a beginner, one step at a time."</em> It will slow down and be gentle with you.</p>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section id="trouble">
+    <h2>7. If something goes wrong</h2>
+    <p>Nothing here is a disaster. Here are the four things that most often go wrong, and the fix.</p>
+    <table>
+      <thead><tr><th>What you see</th><th>What it means</th><th>What to do</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>It says the key is wrong or not allowed</td>
+          <td>The key was not copied fully, or has a space on the end.</td>
+          <td>Go back to DeepSeek, make a <strong>new</strong> key, copy it carefully, and paste it again. Copy the whole thing, including the <code>sk-</code> at the start.</td>
+        </tr>
+        <tr>
+          <td>It says there is no money or no balance</td>
+          <td>You have not topped up yet, or the credit ran out.</td>
+          <td>Go to DeepSeek, open <strong>Billing</strong>, and add another small amount.</td>
+        </tr>
+        <tr>
+          <td>It says the model cannot be found</td>
+          <td>An old name is selected. Older versions still list names that no longer work.</td>
+          <td>Set the model to <code>deepseek-flash</code>, typed exactly like that.</td>
+        </tr>
+        <tr>
+          <td>It changed something you did not want</td>
+          <td>It was in "Act" mode and you did not read the plan.</td>
+          <td>Switch it to <strong>Plan</strong> mode. In Plan mode it only suggests and never changes anything. Then approve when you are happy.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note amber">
+      <span class="lbl">The universal fallback</span>
+      <p>If you are lost, type this into Cline and it will walk you back: <em>"I am stuck. Tell me exactly what to click next, in plain English, as if I am a complete beginner."</em></p>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section id="safety">
+    <h2>8. Three rules to remember</h2>
+    <div class="note red">
+      <span class="lbl">1. Keep your key private</span>
+      <p>Your <code>sk-...</code> key is like a card number. Never share it, screenshot it, or paste it into a chat. If you think it leaked, go to DeepSeek and delete it, then make a new one.</p>
+    </div>
+    <div class="note red">
+      <span class="lbl">2. Do not paste private things</span>
+      <p>Anything you give it leaves your computer and is read by the company. Do not paste passwords, bank details, or other people's private information. For normal hobbies, recipes, family projects, and learning, it is fine.</p>
+    </div>
+    <div class="note amber">
+      <span class="lbl">3. Check important facts</span>
+      <p>It is confident and friendly, and occasionally wrong &mdash; especially with dates, numbers, and names. For anything that matters, check it against a source you trust. It is a wonderful assistant, not an authority.</p>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section id="done">
+    <h2>9. You are finished</h2>
+    <p>Here is everything you have set up. If all of these are true, you are done.</p>
+    <ul class="tick">
+      <li>You have VS Code installed on your computer.</li>
+      <li>The Cline helper is installed and you can open its chat panel.</li>
+      <li>You have a DeepSeek key saved somewhere safe.</li>
+      <li>Cline is set to <code>deepseek-flash</code> and can answer you.</li>
+      <li>You have made a file, and you know how to put it on the internet.</li>
+    </ul>
+    <div class="note green">
+      <span class="lbl">Go and play</span>
+      <p>The best way to learn now is simply to ask for things you actually want. Start with something small and fun. You genuinely cannot break it.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Your First AI Helper</strong> &mdash; a beginner's guide. Prices, names and web addresses were correct in October 2026 and can change; if a button has moved, the wording above still tells you what to look for.</p>
+    <p>Made to be shared. If you get stuck, ask your helper: <em>"I am stuck, explain it like I am a beginner."</em></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // copy buttons
+  document.querySelectorAll('.codebox, .prompt').forEach(function(box){
+    var pre = box.querySelector('pre, .pb');
+    if(!pre) return;
+    var b = document.createElement('button');
+    b.className = 'copy'; b.type = 'button'; b.textContent = 'Copy';
+    b.addEventListener('click', function(){
+      var text = pre.innerText;
+      var done = function(){ b.textContent='Copied'; b.classList.add('ok');
+        setTimeout(function(){ b.textContent='Copy'; b.classList.remove('ok'); },1600); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta=document.createElement('textarea'); ta.value=text;
+        document.body.appendChild(ta); ta.select();
+        try{document.execCommand('copy');}catch(e){}
+        document.body.removeChild(ta); done();
+      }
+    });
+    if(box.classList.contains('prompt')){ box.style.position='relative'; }
+    box.appendChild(b);
+  });
+
+  // progress + persistence
+  var KEY='aihelper.done';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('[data-step] input[type=checkbox]'));
+  var total = boxes.length;
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(KEY) || '{}'); }catch(e){ saved = {}; }
+
+  function render(){
+    var n = boxes.filter(function(b){return b.checked;}).length;
+    document.getElementById('pcount').textContent = n + ' of ' + total + ' steps done';
+    document.getElementById('ptrack').style.width = (total ? (n/total*100) : 0) + '%';
+  }
+  boxes.forEach(function(b,i){
+    if(saved['s'+i]) b.checked = true;
+    b.closest('[data-step]').classList.toggle('done', b.checked);
+    b.addEventListener('change', function(){
+      b.closest('[data-step]').classList.toggle('done', b.checked);
+      saved['s'+i] = b.checked;
+      try{ localStorage.setItem(KEY, JSON.stringify(saved)); }catch(e){}
+      render();
+    });
+  });
+  document.getElementById('resets').addEventListener('click', function(){
+    boxes.forEach(function(b,i){ b.checked=false; b.closest('[data-step]').classList.remove('done'); saved['s'+i]=false; });
+    try{ localStorage.setItem(KEY, JSON.stringify(saved)); }catch(e){}
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
